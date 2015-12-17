@@ -1,7 +1,4 @@
-log.roo
-application.log*
-.settings
 .classpath
 .project
+.settings
 target
-.DS_Store
