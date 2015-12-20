@@ -1,7 +1,14 @@
 package com.h2.model.dao.implementation;
 
-import com.h2.model.dao.interfaces.CategoryDao;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
-public class CategoryDaoImp implements CategoryDao {
+import com.h2.model.dao.interfaces.AbstractHbnDao;
+import com.h2.model.dao.interfaces.CategoryDao;
+import com.h2.model.pojo.Category;
+
+@Repository ("categoryDao")
+@Transactional
+public class CategoryDaoImp extends AbstractHbnDao<Category> implements CategoryDao {
 
 }

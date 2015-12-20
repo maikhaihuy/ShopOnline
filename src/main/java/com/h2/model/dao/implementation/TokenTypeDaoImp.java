@@ -4,11 +4,11 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.h2.model.dao.interfaces.AbstractHbnDao;
-import com.h2.model.dao.interfaces.TaxDao;
-import com.h2.model.pojo.Tax;
+import com.h2.model.dao.interfaces.TokenTypeDao;
+import com.h2.model.pojo.TokenType;
 
-@Repository ("taxDao")
+@Repository ("tokenTypeDao")
 @Transactional
-public class TaxDaoImp extends AbstractHbnDao<Tax> implements TaxDao {
+public class TokenTypeDaoImp extends AbstractHbnDao<TokenType> implements TokenTypeDao{
 
 }

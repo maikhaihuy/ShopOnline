@@ -1,7 +1,14 @@
 package com.h2.model.dao.implementation;
 
-import com.h2.model.dao.interfaces.OrderDao;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
-public class OrderDaoImp implements OrderDao{
+import com.h2.model.dao.interfaces.AbstractHbnDao;
+import com.h2.model.dao.interfaces.OrderDao;
+import com.h2.model.pojo.Order;
+
+@Repository ("orderDao")
+@Transactional
+public class OrderDaoImp extends AbstractHbnDao<Order> implements OrderDao{
 
 }
