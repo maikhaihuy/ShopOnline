@@ -1,5 +1,7 @@
 package com.h2.model.dao.interfaces;
 
-public interface DiscountDao {
+import com.h2.model.pojo.Discount;
+
+public interface DiscountDao extends Dao<Discount>{
 
 }

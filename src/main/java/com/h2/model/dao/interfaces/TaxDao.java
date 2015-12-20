@@ -1,5 +1,7 @@
 package com.h2.model.dao.interfaces;
 
-public interface TaxDao {
+import com.h2.model.pojo.Tax;
+
+public interface TaxDao extends Dao<Tax>{
 
 }

@@ -1,5 +1,7 @@
 package com.h2.model.dao.interfaces;
 
-public interface SizeDao {
+import com.h2.model.pojo.Size;
+
+public interface SizeDao extends Dao<Size>{
 
 }

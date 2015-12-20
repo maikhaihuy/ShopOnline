@@ -1,4 +1,4 @@
-package com.h2.model.dao.imlementation;
+package com.h2.model.dao.implementation;
 
 import com.h2.model.dao.interfaces.DetailProductDao;
 

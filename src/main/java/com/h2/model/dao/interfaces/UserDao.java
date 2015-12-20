@@ -1,5 +1,7 @@
 package com.h2.model.dao.interfaces;
 
-public interface UserDao {
+import com.h2.model.pojo.User;
+
+public interface UserDao extends Dao<User> {
 
 }

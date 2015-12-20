@@ -37,19 +37,29 @@
 	<bean id="sessionFactory"
 		class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean"
 		p:dataSource-ref="dataSource"
-		p:packagesToScan="model.dao.impl"
+		p:packagesToScan="com.h2.model.dao.implementation"
 		p:hibernateProperties-ref="hibernateProperties">
 		<property name="annotatedClasses">
 			<list>
-				<value>model.pojo.User</value>
-				<value>model.pojo.Brand</value>
-				<value>model.pojo.Product</value>
-				<value>model.pojo.Color</value>
-				<value>model.pojo.DetailProduct</value>
-				<value>model.pojo.Order</value>
-				<value>model.pojo.DetailOrder</value>
-				<value>model.pojo.Recipient</value>
-				<value>model.pojo.OrderStatus</value>
+				<value>com.h2.model.pojo.Brand</value>
+				<value>com.h2.model.pojo.Category</value>
+				<value>com.h2.model.pojo.City</value>
+				<value>com.h2.model.pojo.Color</value>
+				<value>com.h2.model.pojo.DetailOrder</value>
+				<value>com.h2.model.pojo.DetailProduct</value>
+				<value>com.h2.model.pojo.Discount</value>
+				<value>com.h2.model.pojo.DiscountInfo</value>
+				<value>com.h2.model.pojo.District</value>
+				<value>com.h2.model.pojo.Order</value>
+				<value>com.h2.model.pojo.OrderStatus</value>
+				<value>com.h2.model.pojo.Product</value>
+				<value>com.h2.model.pojo.Recipient</value>
+				<value>com.h2.model.pojo.Roles</value>
+				<value>com.h2.model.pojo.Size</value>
+				<value>com.h2.model.pojo.Tax</value>
+				<value>com.h2.model.pojo.Token</value>
+				<value>com.h2.model.pojo.TokenType</value>
+				<value>com.h2.model.pojo.User</value>
 			</list>
 		</property>
 	</bean>
@@ -60,6 +70,6 @@
 	
 		
 	<tx:annotation-driven/>
-	<!-- <context:component-scan base-package="" /> -->
+	<context:component-scan base-package="com.h2.model.dao.implementation" /> 
 	
 </beans>

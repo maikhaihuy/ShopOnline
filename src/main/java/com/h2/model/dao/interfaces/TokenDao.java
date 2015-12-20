@@ -1,5 +1,7 @@
 package com.h2.model.dao.interfaces;
 
-public interface TokenDao {
+import com.h2.model.pojo.Token;
+
+public interface TokenDao extends Dao<Token>{
 
 }

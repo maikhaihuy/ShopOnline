@@ -1,5 +1,7 @@
 package com.h2.model.dao.interfaces;
 
-public interface RecipientDao {
+import com.h2.model.pojo.Recipient;
+
+public interface RecipientDao extends Dao<Recipient>{
 
 }
