@@ -10,5 +10,7 @@ import com.h2.model.pojo.Recipient;
 @Repository ("recipientDao")
 @Transactional
 public class RecipientDaoImp extends AbstractHbnDao<Recipient> implements RecipientDao {
-
+	public RecipientDaoImp(){
+		this.setDomainClass(Recipient.class);
+	}
 }

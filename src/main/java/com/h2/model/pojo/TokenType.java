@@ -51,7 +51,7 @@ public class TokenType implements Serializable {
 		this.tokenTypeName = tokenTypeName;
 	}
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "tokentype")
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "tokenType")
 	public List<Token> getTokenList() {
 		return tokenList;
 	}

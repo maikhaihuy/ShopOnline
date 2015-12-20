@@ -50,7 +50,7 @@ public class Roles implements Serializable{
 		this.roleName = roleName;
 	}
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "roles")
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "role")
 	public List<User> getUserList() {
 		return userList;
 	}

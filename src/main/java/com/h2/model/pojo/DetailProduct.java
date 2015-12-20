@@ -101,7 +101,7 @@ public class DetailProduct implements Serializable{
 		this.isDeleted = isDeleted;
 	}
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "detailproduct")
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "detailProduct")
 	public List<DetailOrder> getDetailOrderList() {
 		return detailOrderList;
 	}

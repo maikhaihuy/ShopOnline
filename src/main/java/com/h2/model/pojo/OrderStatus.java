@@ -51,7 +51,7 @@ public class OrderStatus implements Serializable{
 		this.orderStatusName = orderStatusName;
 	}
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "orderstatus")
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "orderStatus")
 	public List<Order> getOrderList() {
 		return orderList;
 	}

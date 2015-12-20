@@ -17,31 +17,25 @@ public abstract class AbstractHbnDao <T extends Object> implements Dao<T> {
 		return sessionFactory.getCurrentSession();
 	}
 	
-	@SuppressWarnings("unchecked")
-	private Class<T> getDomainClass() {
-		if (domainClass == null) {			
-			this.domainClass = (Class<T>) GenericTypeResolver.resolveTypeArgument(getClass(), AbstractHbnDao.class);
-		}
-		return domainClass;
+	public void setDomainClass( final Class< T > classToSet ){
+	      this.domainClass = classToSet;
 	}
 	
-	private String getDomainClassName() {
-		return getDomainClass().getName();
-	}
+	
 
 	public T get(Serializable id) {
 		// TODO Auto-generated method stub
-		return (T) getSession().get(getDomainClass(), id);
+		return (T) getSession().get(domainClass, id);
 	}
 
 	public T load(Serializable id) {
 		// TODO Auto-generated method stub
-		return (T) getSession().load(getDomainClass(), id);
+		return (T) getSession().load(domainClass, id);
 	}
 
-	public List<T> getAll() {
-		// TODO Auto-generated method stub
-		return getSession().createQuery("from " + getDomainClassName()).list();
+	public List<T> getAll(String className) {
+		// TODO Auto-generated method stub		
+		return getSession().createQuery("from " + className).list();
 	}
 
 	public void update(T t) {
@@ -61,14 +55,13 @@ public abstract class AbstractHbnDao <T extends Object> implements Dao<T> {
 
 	public void deleteAll() {
 		// TODO Auto-generated method stub
-		getSession().createQuery("delete " +  getDomainClassName()).executeUpdate();
+		getSession().createQuery("delete " +  domainClass.getName()).executeUpdate();
 	}
 
 	public long count() {
 		// TODO Auto-generated method stub
 		return (Long) getSession().createQuery(
-				"select count(*) from " +
-				getDomainClassName()).uniqueResult();
+				"select count(*) from " +	this.domainClass).uniqueResult();
 	}
 
 	public boolean exists(Serializable id) {

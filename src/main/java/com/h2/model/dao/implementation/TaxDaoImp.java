@@ -10,5 +10,7 @@ import com.h2.model.pojo.Tax;
 @Repository ("taxDao")
 @Transactional
 public class TaxDaoImp extends AbstractHbnDao<Tax> implements TaxDao {
-
+	public TaxDaoImp(){
+		this.setDomainClass(Tax.class);
+	}
 }

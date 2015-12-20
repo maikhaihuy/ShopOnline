@@ -10,5 +10,7 @@ import com.h2.model.pojo.User;
 @Repository ("userDao")
 @Transactional
 public class UserDaoImp extends AbstractHbnDao<User> implements UserDao {
-
+	public UserDaoImp(){
+		this.setDomainClass(User.class);
+	}
 }

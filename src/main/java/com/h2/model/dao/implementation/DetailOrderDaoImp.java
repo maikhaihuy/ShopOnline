@@ -10,5 +10,7 @@ import com.h2.model.pojo.DetailOrder;
 @Repository ("detailOrderDao")
 @Transactional
 public class DetailOrderDaoImp extends AbstractHbnDao<DetailOrder> implements DetailOrderDao {
-
+	public DetailOrderDaoImp(){
+		this.setDomainClass(DetailOrder.class);
+	}
 }

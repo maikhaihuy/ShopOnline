@@ -10,5 +10,7 @@ import com.h2.model.pojo.Category;
 @Repository ("categoryDao")
 @Transactional
 public class CategoryDaoImp extends AbstractHbnDao<Category> implements CategoryDao {
-
+	public CategoryDaoImp(){
+		this.setDomainClass(Category.class);
+	}
 }

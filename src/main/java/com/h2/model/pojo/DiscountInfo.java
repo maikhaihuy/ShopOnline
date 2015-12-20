@@ -76,7 +76,7 @@ public class DiscountInfo implements Serializable{
 		this.product = product;
 	}
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "discountinfo")
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "discountInfo")
 	public List<Discount> getDiscountList() {
 		return discountList;
 	}
