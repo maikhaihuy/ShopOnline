@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+   	   xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xsi:schemaLocation="
+        http://www.springframework.org/schema/beans 
+        http://www.springframework.org/schema/beans/spring-beans-4.1.xsd
+        http://www.springframework.org/schema/tx
+        http://www.springframework.org/schema/tx/spring-tx-4.1.xsd
+        http://www.springframework.org/schema/util
+        http://www.springframework.org/schema/util/spring-util-4.1.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+        
+   
+    
+    <context:property-placeholder location="classpath:/environment.properties" />
+	<bean id="dataSource" 
+		class="org.apache.commons.dbcp2.BasicDataSource" destroy-method="close"
+		p:driverClassName="${dataSource.driverClassName}"
+		p:url="${dataSource.url}"
+		p:username="${dataSource.username}"
+		p:password="${dataSource.password}" 
+		p:initialSize="10"      
+		p:maxIdle="1" />
+
+   	<util:properties id="hibernateProperties">
+		<prop key="hibernate.dialect">
+		org.hibernate.dialect.MySQL5InnoDBDialect
+		</prop>
+		<prop key="hibernate.show_sql">false</prop>
+	</util:properties>
+		
+	<bean id="sessionFactory"
+		class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean"
+		p:dataSource-ref="dataSource"
+		p:packagesToScan="model.dao.impl"
+		p:hibernateProperties-ref="hibernateProperties">
+		<property name="annotatedClasses">
+			<list>
+				<value>model.pojo.User</value>
+				<value>model.pojo.Brand</value>
+				<value>model.pojo.Product</value>
+				<value>model.pojo.Color</value>
+				<value>model.pojo.DetailProduct</value>
+				<value>model.pojo.Order</value>
+				<value>model.pojo.DetailOrder</value>
+				<value>model.pojo.Recipient</value>
+				<value>model.pojo.OrderStatus</value>
+			</list>
+		</property>
+	</bean>
+		
+	<bean id="transactionManager"
+		class="org.springframework.orm.hibernate3.HibernateTransactionManager"
+		p:sessionFactory-ref="sessionFactory" />
+	
+		
+	<tx:annotation-driven/>
+	<!-- <context:component-scan base-package="" /> -->
+	
+</beans>
