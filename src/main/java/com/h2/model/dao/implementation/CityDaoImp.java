@@ -10,7 +10,5 @@ import com.h2.model.pojo.City;
 @Repository ("cityDao")
 @Transactional
 public class CityDaoImp extends AbstractHbnDao<City> implements CityDao {
-	public CityDaoImp(){
-		this.setDomainClass(City.class);
-	}
+	
 }

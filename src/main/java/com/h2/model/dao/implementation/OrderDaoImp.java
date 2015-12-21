@@ -10,7 +10,5 @@ import com.h2.model.pojo.Order;
 @Repository ("orderDao")
 @Transactional
 public class OrderDaoImp extends AbstractHbnDao<Order> implements OrderDao{
-	public OrderDaoImp(){
-		this.setDomainClass(Order.class);
-	}
+	
 }

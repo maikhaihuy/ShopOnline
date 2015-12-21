@@ -10,7 +10,5 @@ import com.h2.model.pojo.Token;
 @Repository ("tokenDao")
 @Transactional
 public class TokenDaoImp extends AbstractHbnDao<Token> implements TokenDao {
-	public TokenDaoImp(){
-		this.setDomainClass(Token.class);
-	}
+	
 }

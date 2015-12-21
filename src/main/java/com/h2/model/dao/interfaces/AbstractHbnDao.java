@@ -1,72 +1,136 @@
 package com.h2.model.dao.interfaces;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
+
+
+
+
+
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.GenericTypeResolver;
+import org.springframework.transaction.annotation.Transactional;
 
+@Transactional
 public abstract class AbstractHbnDao <T extends Object> implements Dao<T> {
 
 	@Autowired
 	private SessionFactory sessionFactory;
-	private Class<T> domainClass;
-	
+		
 	protected Session getSession() {
 		return sessionFactory.getCurrentSession();
 	}
 	
-	public void setDomainClass( final Class< T > classToSet ){
-	      this.domainClass = classToSet;
-	}
-	
-	
 
-	public T get(Serializable id) {
+
+	public T get(Serializable id, Class<T> domainClass) {
 		// TODO Auto-generated method stub
-		return (T) getSession().get(domainClass, id);
+		T result = null;
+	       
+        try{ 
+        	result =  (T) getSession().get(domainClass, id);     
+        } catch (Exception e) {
+            e.printStackTrace();          
+            //log.error(e);            
+        } 
+        
+        return result;		
 	}
 
-	public T load(Serializable id) {
+	public T load(Serializable id, Class<T> domainClass) {
 		// TODO Auto-generated method stub
-		return (T) getSession().load(domainClass, id);
+		T result = null;
+	       
+        try{ 
+        	result =  (T) getSession().load(domainClass, id);   
+        } catch (Exception e) {
+            e.printStackTrace();          
+            //log.error(e);            
+        } 
+        
+        return result;				
 	}
 
 	public List<T> getAll(String className) {
-		// TODO Auto-generated method stub		
-		return getSession().createQuery("from " + className).list();
+		// TODO Auto-generated method stub	
+		List<T> result = new ArrayList<T>();
+	       
+	     try{ 
+	     	result =  getSession().createQuery("from " + className).list();  
+	     } catch (Exception e) {
+	         e.printStackTrace();          
+	         //log.error(e);            
+	     } 
+		 return result;
 	}
 
 	public void update(T t) {
 		// TODO Auto-generated method stub
-		getSession().update(t);
+		try{ 
+			getSession().update(t);  
+	    } catch (Exception e) {
+	         e.printStackTrace();          
+	         //log.error(e);            
+	    } 		
 	}
 
 	public void delete(T t) {
 		// TODO Auto-generated method stub
-		getSession().delete(t);
+		try{ 
+			getSession().delete(t);
+	    } catch (Exception e) {
+	         e.printStackTrace();          
+	         //log.error(e);            
+	    } 		
+		
 	}
 
-	public void deleteById(Serializable id) {
+	public void deleteById(Serializable id, Class<T> domainClass) {
 		// TODO Auto-generated method stub
-		delete(load(id));
+		try{ 
+			delete(load(id, domainClass));
+	    } catch (Exception e) {
+	         e.printStackTrace();          
+	         //log.error(e);            
+	    } 		
+		
 	}
 
-	public void deleteAll() {
+	public void deleteAll(Class<T> domainClass) {
 		// TODO Auto-generated method stub
-		getSession().createQuery("delete " +  domainClass.getName()).executeUpdate();
+		try{ 
+			getSession().createQuery("delete " +  domainClass.getName()).executeUpdate();
+	    } catch (Exception e) {
+	         e.printStackTrace();          
+	         //log.error(e);            
+	    } 		
+
 	}
 
-	public long count() {
+	public int count(String className) {
 		// TODO Auto-generated method stub
-		return (Long) getSession().createQuery(
-				"select count(*) from " +	this.domainClass).uniqueResult();
+		int result = 0; 
+		try{ 
+			result =  getAll(className).size();
+	    } catch (Exception e) {
+	         e.printStackTrace();          
+	         //log.error(e);            
+	    } 		
+		return result;
 	}
 
-	public boolean exists(Serializable id) {
+	public boolean exists(Serializable id, Class<T> domainClass) {
 		// TODO Auto-generated method stub
-		return (get(id) != null);
+		boolean result = false; 
+		try{ 
+			result = (get(id, domainClass) != null);
+	    } catch (Exception e) {
+	         e.printStackTrace();          
+	         //log.error(e);            
+	    } 		
+		return result;		
 	}
 	
 	

@@ -10,7 +10,5 @@ import com.h2.model.pojo.Product;
 @Repository ("productDao")
 @Transactional
 public class ProductDaoImp extends AbstractHbnDao<Product> implements ProductDao {
-	public ProductDaoImp(){
-		this.setDomainClass(Product.class);
-	}
+	
 }

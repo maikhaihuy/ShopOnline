@@ -10,7 +10,5 @@ import com.h2.model.pojo.DiscountInfo;
 @Repository ("discountInfoDao")
 @Transactional
 public class DiscountInfoDaoImp extends AbstractHbnDao<DiscountInfo> implements DiscountInfoDao {
-	public DiscountInfoDaoImp(){
-		this.setDomainClass(DiscountInfo.class);
-	}
+	
 }

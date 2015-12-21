@@ -10,7 +10,5 @@ import com.h2.model.pojo.Roles;
 @Repository ("rolesDao")
 @Transactional
 public class RolesDaoImp extends AbstractHbnDao<Roles> implements RolesDao {
-	public RolesDaoImp(){
-		this.setDomainClass(Roles.class);
-	}
+	
 }

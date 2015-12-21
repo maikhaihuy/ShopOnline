@@ -10,7 +10,5 @@ import com.h2.model.pojo.Size;
 @Repository ("sizeDao")
 @Transactional
 public class SizeDaoImp  extends AbstractHbnDao<Size> implements SizeDao {
-	public SizeDaoImp(){
-		this.setDomainClass(Size.class);
-	}
+	
 }

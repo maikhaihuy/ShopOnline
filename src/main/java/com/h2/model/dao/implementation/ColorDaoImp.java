@@ -10,7 +10,5 @@ import com.h2.model.pojo.Color;
 @Repository ("colorDao")
 @Transactional
 public class ColorDaoImp extends AbstractHbnDao<Color> implements ColorDao{
-	public ColorDaoImp(){
-		this.setDomainClass(Color.class);
-	}
+	
 }
