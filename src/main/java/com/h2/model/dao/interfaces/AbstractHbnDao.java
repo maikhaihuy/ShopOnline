@@ -8,6 +8,7 @@ import java.util.List;
 
 
 
+
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -133,5 +134,14 @@ public abstract class AbstractHbnDao <T extends Object> implements Dao<T> {
 		return result;		
 	}
 	
+	public T save(T t){
+		try{                	          
+            getSession().save(t); 
+        } catch (Exception e) {
+            e.printStackTrace();
+            //log.error(e);          
+        } 
+		return t;
+	}
 	
 }

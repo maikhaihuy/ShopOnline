@@ -21,7 +21,8 @@ public class BrandDaoImpTest extends TestCase{
 		
         List<Brand> expResult = null;
         String name = Brand.class.getName();
-        List<Brand> result = instance.getAll(name);
+        //List<Brand> result = instance.getAll(name);
+        List<Brand> result = instance.getListBrand();
         if (result.size() == 0){
             fail("The test case is a prototype.");
         }
