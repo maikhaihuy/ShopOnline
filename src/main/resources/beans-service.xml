@@ -71,5 +71,6 @@
 		
 	<tx:annotation-driven/>
 	<context:component-scan base-package="com.h2.model.dao.implementation" /> 
+	<context:component-scan base-package="com.h2.controller" />
 	
 </beans>

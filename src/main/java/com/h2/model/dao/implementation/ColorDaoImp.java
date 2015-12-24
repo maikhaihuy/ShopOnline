@@ -15,7 +15,7 @@ public class ColorDaoImp extends AbstractHbnDao<Color> implements ColorDao{
 
 	public List<Color> getListColor() {
 		// TODO Auto-generated method stub
-		return getAll(Color.class.getName());
+		return getAllOrderBy(Color.class.getName(), "colorName");
 	}
 	
 }

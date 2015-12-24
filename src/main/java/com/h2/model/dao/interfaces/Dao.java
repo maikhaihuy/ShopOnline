@@ -8,6 +8,7 @@ public interface Dao <T extends Object>{
 	public T get(Serializable id, Class<T> domainClass);
 	public T load(Serializable id, Class<T> domainClass);
 	public List<T> getAll(String className);
+	public List<T> getAllOrderBy(String className, String orderBy);
 	public void update(T t);
 	public void delete(T t);
 	public void deleteById(Serializable id, Class<T> domainClass);

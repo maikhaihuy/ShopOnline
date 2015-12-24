@@ -15,7 +15,7 @@ public class BrandDaoImp extends AbstractHbnDao<Brand> implements BrandDao {
 
 	// Get list brand
 	public List<Brand> getListBrand() {
-		return getAll(Brand.class.getName());
+		return getAllOrderBy(Brand.class.getName(), "brandName");
 	}		
 	
 }

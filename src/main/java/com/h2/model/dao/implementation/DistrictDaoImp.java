@@ -23,7 +23,7 @@ public class DistrictDaoImp extends AbstractHbnDao<District> implements District
         City city = (City)getSession().get(City.class, cityId);
         try{          
         	
-            hql = "FROM District d WHERE d.city = :city";
+            hql = "FROM District d WHERE d.city = :city ";
             query = getSession().createQuery(hql);
             query.setParameter("city", city);
             listDistrict =  query.list();

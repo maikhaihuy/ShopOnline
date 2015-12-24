@@ -9,6 +9,9 @@ import java.util.List;
 
 
 
+
+
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,17 +56,40 @@ public abstract class AbstractHbnDao <T extends Object> implements Dao<T> {
         
         return result;				
 	}
-
+	
 	public List<T> getAll(String className) {
 		// TODO Auto-generated method stub	
 		List<T> result = new ArrayList<T>();
-	       
-	     try{ 
-	     	result =  getSession().createQuery("from " + className).list();  
-	     } catch (Exception e) {
-	         e.printStackTrace();          
-	         //log.error(e);            
-	     } 
+		String hql = "";
+		Query query = null; 
+		
+		try{ 
+			hql =  "from " + className;  
+			query = getSession().createQuery(hql); 		
+			result = query.list();
+		} catch (Exception e) {
+			e.printStackTrace();          
+			//log.error(e);            
+		} 
+		
+		 return result;
+	}
+
+	public List<T> getAllOrderBy(String className, String orderBy) {
+		// TODO Auto-generated method stub	
+		List<T> result = new ArrayList<T>();
+		String hql = "";
+		Query query = null; 
+		
+		try{ 
+			hql =  "from " + className + " ORDER BY " + orderBy;  
+			query = getSession().createQuery(hql); 			
+			result = query.list();
+		} catch (Exception e) {
+			e.printStackTrace();          
+			//log.error(e);            
+		} 
+		
 		 return result;
 	}
 

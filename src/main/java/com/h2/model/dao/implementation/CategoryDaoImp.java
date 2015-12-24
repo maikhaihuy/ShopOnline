@@ -15,7 +15,7 @@ public class CategoryDaoImp extends AbstractHbnDao<Category> implements Category
 
 	public List<Category> getListCategory() {
 		// TODO Auto-generated method stub
-		return getAll(Category.class.getName());
+		return getAllOrderBy(Category.class.getName(), "categoryName");
 	}
 	
 }

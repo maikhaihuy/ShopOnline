@@ -15,7 +15,7 @@ public class CityDaoImp extends AbstractHbnDao<City> implements CityDao {
 
 	public List<City> getListCity() {
 		// TODO Auto-generated method stub
-		return getAll(City.class.getName());
+		return getAllOrderBy(City.class.getName(), "cityName");
 	}
 	
 }

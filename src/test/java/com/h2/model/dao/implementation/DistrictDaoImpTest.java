@@ -19,7 +19,7 @@ public class DistrictDaoImpTest extends TestCase{
 		DistrictDao instance = (DistrictDao)appCtx.getBean("districtDao");
 		
         List<District> expResult = null;      
-        List<District> result = instance.getDistrictByIdCity(2);
+        List<District> result = instance.getDistrictByIdCity(1);
         if (result == expResult){
             fail("The test case is a prototype.");
         }

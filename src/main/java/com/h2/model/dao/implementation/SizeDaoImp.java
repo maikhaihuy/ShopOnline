@@ -15,7 +15,7 @@ public class SizeDaoImp  extends AbstractHbnDao<Size> implements SizeDao {
 
 	public List<Size> getListSize() {
 		List<Size> listSize = null;
-		listSize = getAll(Size.class.getName());
+		listSize = getAllOrderBy(Size.class.getName(), "sizeName");
 		return listSize;
 	}
 	

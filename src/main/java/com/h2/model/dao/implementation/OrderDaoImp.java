@@ -37,9 +37,10 @@ public class OrderDaoImp extends AbstractHbnDao<Order> implements OrderDao{
         User user = userDao.getUserByUserName(userName);
         
         try{                	
-            hql = "FROM Order d WHERE d.user = :user";
+            hql = "FROM Order d WHERE d.user = :user AND d.isDeleted = :isDeleted ORDER BY d.orderDate DESC";
             query = getSession().createQuery(hql);
             query.setParameter("user", user);
+            query.setParameter("isDeleted", 0);
             listOrder =  query.list();
         } catch (Exception e) {
             e.printStackTrace();

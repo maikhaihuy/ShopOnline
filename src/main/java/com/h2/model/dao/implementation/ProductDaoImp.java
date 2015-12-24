@@ -1,6 +1,7 @@
 package com.h2.model.dao.implementation;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.hibernate.Query;
@@ -9,26 +10,63 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.h2.model.dao.interfaces.AbstractHbnDao;
+import com.h2.model.dao.interfaces.BrandDao;
 import com.h2.model.dao.interfaces.CategoryDao;
+import com.h2.model.dao.interfaces.ColorDao;
 import com.h2.model.dao.interfaces.ProductDao;
+import com.h2.model.dao.interfaces.SizeDao;
+import com.h2.model.pojo.Brand;
 import com.h2.model.pojo.Category;
+import com.h2.model.pojo.Color;
 import com.h2.model.pojo.Product;
+import com.h2.model.pojo.Size;
 
 @Repository ("productDao")
 @Transactional
 public class ProductDaoImp extends AbstractHbnDao<Product> implements ProductDao {
 	@Autowired
-	private CategoryDao categoryDao;
+	private CategoryDao categoryDao;	
+	@Autowired
+	private BrandDao brandDao;
+	@Autowired
+	private ColorDao colorDao;
+	@Autowired
+	private SizeDao sizeDao;
 	
+	// Get list of product
 	public List<Product> getListProduct() {
-		return getAll(Product.class.getName());
+		return getAllOrderBy(Product.class.getName(), "productName");
+	}
+	
+	// Get list of products with paging	
+	public List<Product> getListProductWithPaging(int pageNumber, int productPerPage) {
+		List<Product> listProduct = new ArrayList<Product>();
+		String hql = "";
+		Query query = null; 
+		int n = (pageNumber - 1)*productPerPage;
+        int m = productPerPage*pageNumber;
+		
+		try{ 
+			hql =  "from Product p ORDER BY p.productName" ;  
+			query = getSession().createQuery(hql); 
+			query.setFirstResult(n);
+			query.setMaxResults(m);
+			listProduct = query.list();
+		} catch (Exception e) {
+			e.printStackTrace();          
+			//log.error(e);            
+		} 
+		
+		 return listProduct;
 	}
 
+	// Get list of products by product id
 	public Product getProductById(int productId) {
 		// TODO Auto-generated method stub
 		return get(productId, Product.class);
 	}
 
+	// Get list of new product (newProduct = 1)
 	public List<Product> getListNewProduct() {
 		Query query = null;
         List<Product> listProduct = new ArrayList<Product>();
@@ -46,15 +84,17 @@ public class ProductDaoImp extends AbstractHbnDao<Product> implements ProductDao
         return listProduct;
 	}
 
+	// Get list product has discount date > current date
 	public List<Product> getListDiscountProduct() {
 		Query query = null;
         List<Product> listProduct = new ArrayList<Product>();
-        String hql = "";      
+        String hql = "";   
+        Date date = new Date();
         
         try{                	
-            hql = "FROM Product p WHERE p.productNew = :productNew ORDER BY p.productName";
+            hql = "SELECT DISTINCT d.product FROM Discount d WHERE d.discountEndDate > :currentDate ORDER BY d.product.productName";
             query = getSession().createQuery(hql);
-            query.setParameter("productNew", 1);
+            query.setParameter("currentDate", date);
             listProduct =  query.list();
         } catch (Exception e) {
             e.printStackTrace();
@@ -63,7 +103,12 @@ public class ProductDaoImp extends AbstractHbnDao<Product> implements ProductDao
         return listProduct;
 	}
 
-	public List<Product> getListProductByIdCategoryProductName(int categoryId, String productName) {
+	// Get list of products by category and product name
+	// orderBy = {1.productNameAsc, 
+		//            2.productNameDesc, 
+		//            3.productPriceAsc, 
+		//            4.productPriceDesc}, default orderBy = 1.productNameAsc
+	public List<Product> getListProductByIdCategoryProductName(int categoryId, String productName, int orderBy) {
 		Query query = null;
         List<Product> listProduct = new ArrayList<Product>();
         String hql = "";    
@@ -72,7 +117,13 @@ public class ProductDaoImp extends AbstractHbnDao<Product> implements ProductDao
         Category category = categoryDao.get(categoryId, Category.class);
         
         try{                	
-            hql = "FROM Product p WHERE p.productName LIKE :productName AND p.category = :category ORDER BY p.productName";
+            hql = "FROM Product p WHERE p.productName LIKE :productName AND p.category = :category ORDER BY p.productName ";
+            switch (orderBy){
+	            case 2: hql +=  " ORDER BY p.productName DESC"; break;
+	            case 3: hql +=  " ORDER BY p.productPrice " ; break;
+	            case 4: hql +=  " ORDER BY p.productPrice DESC" ; break;
+	            default:  hql +=  " ORDER BY  p.productName " ; break;
+	        }
             query = getSession().createQuery(hql);   
             query.setString("productName", "%"+productName+"%");
             query.setParameter("category", category);
@@ -83,5 +134,118 @@ public class ProductDaoImp extends AbstractHbnDao<Product> implements ProductDao
         } 
         return listProduct;
 	}
+
+	
+	// Get list of product by category
+	// orderBy = {1.productNameAsc, 
+		//            2.productNameDesc, 
+		//            3.productPriceAsc, 
+		//            4.productPriceDesc}, default orderBy = productNameAsc
+	public List<Product> getListProductByIdCategory(int categoryId, int orderBy) {
+		Query query = null;
+        List<Product> listProduct = new ArrayList<Product>();
+        String hql = "";    
+        
+        // Get category by categoryId
+        Category category = categoryDao.get(categoryId, Category.class);
+        
+        try{                	
+            hql = "FROM Product p WHERE  p.category = :category ";
+            switch (orderBy){
+	            case 2: hql +=  " ORDER BY p.productName DESC"; break;
+	            case 3: hql +=  " ORDER BY p.productPrice " ; break;
+	            case 4: hql +=  " ORDER BY p.productPrice DESC" ; break;
+	            default:  hql +=  " ORDER BY  p.productName " ; break;
+            }
+            query = getSession().createQuery(hql);              
+            query.setParameter("category", category);
+            listProduct =  query.list();
+        } catch (Exception e) {
+            e.printStackTrace();
+            //log.error(e);          
+        } 
+        return listProduct;
+	}
+	
+	// Search product by category, brand, color, size, price, name 
+	// default value = 0, name = "", fromPrice = 0, toPrice = 0 
+	// orderBy = {1.productNameAsc, 
+	//            2.productNameDesc, 
+	//            3.productPriceAsc, 
+	//            4.productPriceDesc}, default orderBy = productNameAsc
+
+	public List<Product> searchProductByCategoryBrandColorSizePriceName(
+			int categoryId, int brandId, int colorId, int sizeId,
+			float fromPrice, float toPrice, String productName, int orderBy) {
+		Query query = null;
+        List<Product> listProduct = new ArrayList<Product>();
+        String hql = "";    
+        
+        // Get category by categoryId
+        Category category = categoryDao.get(categoryId, Category.class);       
+        // Get brand by brandId
+        Brand brand = brandDao.get(brandId, Brand.class);
+        // Get color by colorId
+        Color color = colorDao.get(colorId, Color.class);
+        // Get size by sizeId
+        Size size = sizeDao.get(sizeId, Size.class);
+        
+        
+        try{                	
+            //hql = "FROM Product p WHERE p.productName LIKE :productName ";
+            hql = "SELECT DISTINCT d.product FROM DetailProduct d WHERE d.product.productName LIKE :productName";
+            if (category != null){
+            	hql = hql + " AND d.product.category = :category "; 
+            }           
+            if (brand != null){
+            	hql = hql + " AND d.product.brand = :brand "; 
+            }           
+            if (color != null){
+            	hql = hql + " AND d.color = :color "; 
+            }
+            if (size != null){
+            	hql = hql + " AND d.size = :size "; 
+            }
+            
+            hql = hql +" AND d.product.productPrice >= :fromPrice "; 
+            if (toPrice > 0){
+            	 hql = hql + " AND d.product.productPrice <= :toPrice ";
+            }
+
+            switch (orderBy){
+	            case 2: hql +=  " ORDER BY d.product.productName DESC"; break;
+	            case 3: hql +=  " ORDER BY d.product.productPrice " ; break;
+	            case 4: hql +=  " ORDER BY d.product.productPrice DESC" ; break;
+	            default:  hql +=  " ORDER BY  d.product.productName " ; break;
+            }
+            
+            query = getSession().createQuery(hql);   
+            query.setString("productName", "%"+productName+"%");
+            if (category != null){
+            	query.setParameter("category", category);
+            }           
+            if (brand != null){
+            	query.setParameter("brand", brand);
+            }           
+            if (color != null){
+            	query.setParameter("color", color);
+            }
+            if (size != null){
+            	query.setParameter("size", size);
+            }
+            
+            query.setParameter("fromPrice", fromPrice);
+            if (toPrice > 0){
+            	query.setParameter("toPrice", toPrice);
+            }
+
+            listProduct =  query.list();
+        } catch (Exception e) {
+            e.printStackTrace();
+            //log.error(e);          
+        } 
+        return listProduct;
+	}
+	
 	
 }
