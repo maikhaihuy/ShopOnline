@@ -140,7 +140,7 @@ public class ProductDaoImp extends AbstractHbnDao<Product> implements ProductDao
 	// orderBy = {1.productNameAsc, 
 		//            2.productNameDesc, 
 		//            3.productPriceAsc, 
-		//            4.productPriceDesc}, default orderBy = productNameAsc
+		//            4.productPriceDesc}, default orderBy = 1.productNameAsc
 	public List<Product> getListProductByIdCategory(int categoryId, int orderBy) {
 		Query query = null;
         List<Product> listProduct = new ArrayList<Product>();
@@ -172,7 +172,7 @@ public class ProductDaoImp extends AbstractHbnDao<Product> implements ProductDao
 	// orderBy = {1.productNameAsc, 
 	//            2.productNameDesc, 
 	//            3.productPriceAsc, 
-	//            4.productPriceDesc}, default orderBy = productNameAsc
+	//            4.productPriceDesc}, default orderBy = 1.productNameAsc
 
 	public List<Product> searchProductByCategoryBrandColorSizePriceName(
 			int categoryId, int brandId, int colorId, int sizeId,
