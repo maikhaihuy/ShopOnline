@@ -35,5 +35,15 @@ public class TokenDaoImp extends AbstractHbnDao<Token> implements TokenDao {
         } */
 		return tokenString;
 	}
+
+	public String getRegisterTokenStringByUserName(String userName) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public String getForgotTokenStringByUserName(String userName) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
 }
