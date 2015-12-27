@@ -6,4 +6,5 @@ import com.h2.model.pojo.District;
 
 public interface DistrictDao extends Dao<District> {
 	public List<District> getDistrictByIdCity(int cityId);
+	
 }

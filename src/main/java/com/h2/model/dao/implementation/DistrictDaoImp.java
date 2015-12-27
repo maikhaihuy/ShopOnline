@@ -15,7 +15,8 @@ import com.h2.model.pojo.District;
 @Repository ("districtDao")
 @Transactional
 public class DistrictDaoImp extends AbstractHbnDao<District> implements DistrictDao {
-
+	
+	// Get list of districts in city by cityId
 	public List<District> getDistrictByIdCity(int cityId) {
 		Query query = null;
         List<District> listDistrict = new ArrayList<District>();
@@ -34,5 +35,7 @@ public class DistrictDaoImp extends AbstractHbnDao<District> implements District
         } 
         return listDistrict;
 	}
+
+	
 	
 }
