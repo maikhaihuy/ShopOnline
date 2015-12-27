@@ -100,7 +100,6 @@ public class OrderDaoImp extends AbstractHbnDao<Order> implements OrderDao{
         	return null;
         return listOrder;
 	}
-
 	
 	// Get list of orders  which isn't deleted
 	// Order by date
