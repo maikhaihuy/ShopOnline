@@ -21,7 +21,7 @@ public class UserDaoImpTest extends TestCase{
 		UserDao instance = (UserDao)appCtx.getBean("userDao");
 		
         User expResult = null;      
-        User result = instance.getUserByUserName("user");
+        User result = instance.getUserByUserName("user1");
         if (result == expResult){
             fail("The test case is a prototype.");
         }
@@ -29,41 +29,91 @@ public class UserDaoImpTest extends TestCase{
     }
 	
 	@Test
-    public void testCreateUser() {
-        System.out.println("createUser");
+    public void testGetUserByUserEmail() {
+        System.out.println("getUserByUserEmail");
         ApplicationContext appCtx = new ClassPathXmlApplicationContext("beans-service.xml");
 		UserDao instance = (UserDao)appCtx.getBean("userDao");
-		DistrictDao disDao = (DistrictDao)appCtx.getBean("districtDao");
-		RolesDao rolesDao = (RolesDao)appCtx.getBean("rolesDao");
 		
-		District district = disDao.get(1, District.class);
-		Roles role = rolesDao.get(1, Roles.class);
+        User expResult = null;      
+        User result = instance.getUserByUserEmail("email2");
+        if (result == expResult){
+            fail("The test case is a prototype.");
+        }
+        System.out.println("user name: " + result.getUserName());
+    }
+	
+	
+	@Test
+    public void testCreateNewUser() {
+        System.out.println("createNewUser");
+        ApplicationContext appCtx = new ClassPathXmlApplicationContext("beans-service.xml");
+		UserDao instance = (UserDao)appCtx.getBean("userDao");
 		
-        User result = new User();
-        result.setUserName("user2");
-        result.setUserEmail("mail2");
-        result.setUserAddress("add2");
-        result.setUserPhoneNumber("phone2");
-        result.setUserPassword("Pass2");
-        result.setIsDeleted(0);
-        result.setIsVerified(0);
-        result.setDistrict(district);
-        result.setRole(role);
-        
-        instance.save(result);
-        System.out.println("user name: " + result.getUserId());
+        instance.createNewUser("user4", "email4", "pass5", 3);
+      
     }
 	
 	@Test
-    public void testUpdateUser() {
-        System.out.println("updateUser");
+    public void testUpdateUserPassword() {
+        System.out.println("updateUserPassword");
+        ApplicationContext appCtx = new ClassPathXmlApplicationContext("beans-service.xml");
+		UserDao instance = (UserDao)appCtx.getBean("userDao");
+		
+        instance.updateUserPassword("user1", "pass1");
+       
+    }
+	
+	@Test
+    public void testVerifiedUser() {
+        System.out.println("VerifiedUser");
         ApplicationContext appCtx = new ClassPathXmlApplicationContext("beans-service.xml");
 		UserDao instance = (UserDao)appCtx.getBean("userDao");
 		
         User result = instance.get(1, User.class);
-        result.setUserName("user1");
-        
-        instance.update(result);
+       
+        instance.updateVerifiedUser("user1");
         System.out.println("user name: " + result.getUserId());
     }
+	
+	@Test
+    public void testLogin() {
+        System.out.println("Login");
+        ApplicationContext appCtx = new ClassPathXmlApplicationContext("beans-service.xml");
+		UserDao instance = (UserDao)appCtx.getBean("userDao");
+		
+        User result = instance.get(1, User.class);
+       
+        instance.login("user1", "pass1");
+        System.out.println("user name: " + result.getUserId());
+    }
+	
+	@Test
+    public void testCheckUserNameExist() {
+        System.out.println("checkUserNameExist");
+        ApplicationContext appCtx = new ClassPathXmlApplicationContext("beans-service.xml");
+		UserDao instance = (UserDao)appCtx.getBean("userDao");
+		
+        Boolean result = instance.checkUserNameExist("user1");
+
+        if (result){
+        	System.out.println("User name exists");
+        }else
+        System.out.println("User name doesn't exist");
+    }
+	
+	@Test
+    public void testCheckUserEmailExist() {
+        System.out.println("checkUserEmailExist");
+        ApplicationContext appCtx = new ClassPathXmlApplicationContext("beans-service.xml");
+		UserDao instance = (UserDao)appCtx.getBean("userDao");
+		
+        Boolean result = instance.checkUserEmailExist("email1");
+
+        if (result){
+        	System.out.println("User email exists");
+        }else
+        System.out.println("User email doesn't exist");
+    }
+    
+    
 }

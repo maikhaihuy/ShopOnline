@@ -2,6 +2,7 @@ package com.h2.model.dao.implementation;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import org.hibernate.Query;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +13,6 @@ import com.h2.model.dao.interfaces.AbstractHbnDao;
 import com.h2.model.dao.interfaces.DistrictDao;
 import com.h2.model.dao.interfaces.RolesDao;
 import com.h2.model.dao.interfaces.UserDao;
-import com.h2.model.pojo.City;
 import com.h2.model.pojo.District;
 import com.h2.model.pojo.Roles;
 import com.h2.model.pojo.User;
@@ -71,13 +71,13 @@ public class UserDaoImp extends AbstractHbnDao<User> implements UserDao {
 	public void updateUserPassword(String userName, String userPassword) {
 		Query query= null;
         String hql = "";
-        
+        String hashPassword = hashPassword(userPassword);
         // Check userName exists
         if (getUserByUserName(userName) != null){
 	        try{                  	
 	            hql = "UPDATE User set userPassword = :userPassword  WHERE userName = :userName";
 	            query = getSession().createQuery(hql);
-	            query.setParameter("userPassword", userPassword);
+	            query.setParameter("userPassword", hashPassword);
 	            query.setParameter("userName", userName);
 	            query.executeUpdate();
 	      
@@ -90,8 +90,7 @@ public class UserDaoImp extends AbstractHbnDao<User> implements UserDao {
 	}
 
 	// Create new user
-	// Return register token string
-	public String createNewUser(String userName, String userEmail,
+	public User createNewUser(String userName, String userEmail,
 			String userPassword, int roleId) {
 		User user = new User();
         user.setUserName(userName);
@@ -103,23 +102,23 @@ public class UserDaoImp extends AbstractHbnDao<User> implements UserDao {
         user.setDistrict(districtDao.get(1, District.class));
         user.setIsVerified(0);
         user.setRole(rolesDao.get(roleId, Roles.class));
-        // Create token
-        return repository.save(user);
-		return null;
+        save(user);
+		return user;
 	}
 
 
-	// Return user, set password null
+	// Return user, set password = ""
 	public User login(String userName, String userPassword) {
 		Query query = null;
         List<User> listUser = new ArrayList<User>();
         String hql = "";   
         String hashPassword = hashPassword(userPassword);
         try{                  	
-            hql = "FROM User u WHERE u.userName = :userName AND u.userPassword = :hashPassword";
+            hql = "FROM User u WHERE u.userName = :userName AND u.userPassword = :hashPassword AND u.isVerified = :isVerified";
             query = getSession().createQuery(hql);
             query.setParameter("userName", userName);
-            query.setParameter("userPassword", hashPassword);
+            query.setParameter("hashPassword", hashPassword);
+            query.setParameter("isVerified", 1);
             listUser =  query.list();
         } catch (Exception e) {
             e.printStackTrace();
@@ -127,7 +126,7 @@ public class UserDaoImp extends AbstractHbnDao<User> implements UserDao {
         } 
         
         if (listUser.size() == 1){
-        	listUser.get(0).setUserPassword(null);
+        	listUser.get(0).setUserPassword("");
         	return listUser.get(0);
         }
 		return null;
@@ -145,16 +144,39 @@ public class UserDaoImp extends AbstractHbnDao<User> implements UserDao {
 	// Return false if not
 	public boolean checkUserNameExist(String userName) {		
         if (getUserByUserName(userName) == null)
-        	return true;
-		return false;
+        	return false;
+		return true;
 	}
 
 	// Check userEmail exists when register
 	// Return false if not
 	public boolean checkUserEmailExist(String userEmail) {		
         if (getUserByUserEmail(userEmail) == null)
-        	return true;
-		return false;
+        	return false;
+		return true;
+	}
+
+	
+	// Update isVerified property of user after checking token is verified when registering
+	public void updateVerifiedUser(String userName) {
+		Query query= null;
+        String hql = "";
+        
+        // Check userName exists
+        if (getUserByUserName(userName) != null){
+	        try{                  	
+	            hql = "UPDATE User set isVerified = :isVerified  WHERE userName = :userName";
+	            query = getSession().createQuery(hql);
+	            query.setParameter("isVerified", 1);
+	            query.setParameter("userName", userName);
+	            query.executeUpdate();
+	      
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	            //log.error(e);
+	
+	        } 
+        }
 	}
 
 	
