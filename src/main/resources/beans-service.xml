@@ -60,6 +60,7 @@
 				<value>com.h2.model.pojo.Token</value>
 				<value>com.h2.model.pojo.TokenType</value>
 				<value>com.h2.model.pojo.User</value>
+				<value>com.h2.model.pojo.Tag</value>
 			</list>
 		</property>
 	</bean>

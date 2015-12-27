@@ -13,11 +13,13 @@ import com.h2.model.dao.interfaces.AbstractHbnDao;
 import com.h2.model.dao.interfaces.BrandDao;
 import com.h2.model.dao.interfaces.CategoryDao;
 import com.h2.model.dao.interfaces.ColorDao;
+import com.h2.model.dao.interfaces.DetailProductDao;
 import com.h2.model.dao.interfaces.ProductDao;
 import com.h2.model.dao.interfaces.SizeDao;
 import com.h2.model.pojo.Brand;
 import com.h2.model.pojo.Category;
 import com.h2.model.pojo.Color;
+import com.h2.model.pojo.DetailProduct;
 import com.h2.model.pojo.Product;
 import com.h2.model.pojo.Size;
 
@@ -32,10 +34,29 @@ public class ProductDaoImp extends AbstractHbnDao<Product> implements ProductDao
 	private ColorDao colorDao;
 	@Autowired
 	private SizeDao sizeDao;
+	@Autowired
+	private DetailProductDao detailProductDao;
 	
-	// Get list of product
-	public List<Product> getListProduct() {
-		return getAllOrderBy(Product.class.getName(), "productName");
+	// Get list of product with times, every time 50 products
+	public List<Product> getListProduct(int times) {
+		List<Product> listProduct = new ArrayList<Product>();
+		String hql = "";
+		Query query = null; 
+		int n = (times - 1)*50;
+        int m = times*50;
+		
+		try{ 
+			hql =  "from Product p ORDER BY p.productName" ;  
+			query = getSession().createQuery(hql); 
+			query.setFirstResult(n);
+			query.setMaxResults(m);
+			listProduct = query.list();
+		} catch (Exception e) {
+			e.printStackTrace();          
+			//log.error(e);            
+		} 
+		
+		 return listProduct;
 	}
 	
 	// Get list of products with paging	
@@ -104,29 +125,24 @@ public class ProductDaoImp extends AbstractHbnDao<Product> implements ProductDao
 	}
 
 	// Get list of products by category and product name
-	// orderBy = {1.productNameAsc, 
-		//            2.productNameDesc, 
-		//            3.productPriceAsc, 
-		//            4.productPriceDesc}, default orderBy = 1.productNameAsc
-	public List<Product> getListProductByIdCategoryProductName(int categoryId, String productName, int orderBy) {
+	// with times, every time 50 products
+	public List<Product> getListProductByIdCategoryProductName(int categoryId, String productName, int times) {
 		Query query = null;
         List<Product> listProduct = new ArrayList<Product>();
         String hql = "";    
+        int n = (times - 1)*50;
+        int m = times*50;
         
         // Get category by categoryId
         Category category = categoryDao.get(categoryId, Category.class);
         
         try{                	
-            hql = "FROM Product p WHERE p.productName LIKE :productName AND p.category = :category ORDER BY p.productName ";
-            switch (orderBy){
-	            case 2: hql +=  " ORDER BY p.productName DESC"; break;
-	            case 3: hql +=  " ORDER BY p.productPrice " ; break;
-	            case 4: hql +=  " ORDER BY p.productPrice DESC" ; break;
-	            default:  hql +=  " ORDER BY  p.productName " ; break;
-	        }
+            hql = "FROM Product p WHERE p.productName LIKE :productName AND p.category = :category ORDER BY p.productName ";         
             query = getSession().createQuery(hql);   
             query.setString("productName", "%"+productName+"%");
             query.setParameter("category", category);
+            query.setFirstResult(n);
+			query.setMaxResults(m);
             listProduct =  query.list();
         } catch (Exception e) {
             e.printStackTrace();
@@ -137,28 +153,22 @@ public class ProductDaoImp extends AbstractHbnDao<Product> implements ProductDao
 
 	
 	// Get list of product by category
-	// orderBy = {1.productNameAsc, 
-		//            2.productNameDesc, 
-		//            3.productPriceAsc, 
-		//            4.productPriceDesc}, default orderBy = 1.productNameAsc
-	public List<Product> getListProductByIdCategory(int categoryId, int orderBy) {
+	// with times, every time 50 products
+	public List<Product> getListProductByIdCategory(int categoryId, int times) {
 		Query query = null;
         List<Product> listProduct = new ArrayList<Product>();
         String hql = "";    
-        
+        int n = (times - 1)*50;
+        int m = times*50;
         // Get category by categoryId
         Category category = categoryDao.get(categoryId, Category.class);
         
         try{                	
-            hql = "FROM Product p WHERE  p.category = :category ";
-            switch (orderBy){
-	            case 2: hql +=  " ORDER BY p.productName DESC"; break;
-	            case 3: hql +=  " ORDER BY p.productPrice " ; break;
-	            case 4: hql +=  " ORDER BY p.productPrice DESC" ; break;
-	            default:  hql +=  " ORDER BY  p.productName " ; break;
-            }
+            hql = "FROM Product p WHERE  p.category = :category ORDER BY  p.productName ";         
             query = getSession().createQuery(hql);              
             query.setParameter("category", category);
+            query.setFirstResult(n);
+			query.setMaxResults(m);
             listProduct =  query.list();
         } catch (Exception e) {
             e.printStackTrace();
@@ -167,19 +177,42 @@ public class ProductDaoImp extends AbstractHbnDao<Product> implements ProductDao
         return listProduct;
 	}
 	
-	// Search product by category, brand, color, size, price, name 
-	// default value = 0, name = "", fromPrice = 0, toPrice = 0 
-	// orderBy = {1.productNameAsc, 
-	//            2.productNameDesc, 
-	//            3.productPriceAsc, 
-	//            4.productPriceDesc}, default orderBy = 1.productNameAsc
-
-	public List<Product> searchProductByCategoryBrandColorSizePriceName(
-			int categoryId, int brandId, int colorId, int sizeId,
-			float fromPrice, float toPrice, String productName, int orderBy) {
+	
+	// Get list of product by category
+	// with times, every time 50 products
+	public List<Product> getListProductByIdBrand(int brandId, int times) {
 		Query query = null;
         List<Product> listProduct = new ArrayList<Product>();
         String hql = "";    
+        int n = (times - 1)*50;
+        int m = times*50;
+        // Get brand by brandId
+        Brand brand = brandDao.get(brandId, Brand.class);
+        
+        try{                	
+            hql = "FROM Product p WHERE  p.brand = :brand ORDER BY  p.productName ";         
+            query = getSession().createQuery(hql);              
+            query.setParameter("brand", brand);
+            query.setFirstResult(n);
+			query.setMaxResults(m);
+            listProduct =  query.list();
+        } catch (Exception e) {
+            e.printStackTrace();
+            //log.error(e);          
+        } 
+        return listProduct;
+	}
+		
+	// Search product by category, brand, color, size, price, name 
+	//with times, every time 50 products
+	public List<Product> searchProductByCategoryBrandColorSizePriceName(
+			int categoryId, int brandId, int colorId, int sizeId,
+			float fromPrice, float toPrice, String productName, int times) {
+		Query query = null;
+        List<Product> listProduct = new ArrayList<Product>();
+        String hql = "";    
+        int n = (times - 1)*50;
+        int m = times*50;
         
         // Get category by categoryId
         Category category = categoryDao.get(categoryId, Category.class);       
@@ -212,15 +245,12 @@ public class ProductDaoImp extends AbstractHbnDao<Product> implements ProductDao
             	 hql = hql + " AND d.product.productPrice <= :toPrice ";
             }
 
-            switch (orderBy){
-	            case 2: hql +=  " ORDER BY d.product.productName DESC"; break;
-	            case 3: hql +=  " ORDER BY d.product.productPrice " ; break;
-	            case 4: hql +=  " ORDER BY d.product.productPrice DESC" ; break;
-	            default:  hql +=  " ORDER BY  d.product.productName " ; break;
-            }
+            hql +=  " ORDER BY  d.product.productName " ; 
+            
             
             query = getSession().createQuery(hql);   
             query.setString("productName", "%"+productName+"%");
+            
             if (category != null){
             	query.setParameter("category", category);
             }           
@@ -238,7 +268,8 @@ public class ProductDaoImp extends AbstractHbnDao<Product> implements ProductDao
             if (toPrice > 0){
             	query.setParameter("toPrice", toPrice);
             }
-
+            query.setFirstResult(n);
+			query.setMaxResults(m);
             listProduct =  query.list();
         } catch (Exception e) {
             e.printStackTrace();
@@ -246,6 +277,6 @@ public class ProductDaoImp extends AbstractHbnDao<Product> implements ProductDao
         } 
         return listProduct;
 	}
-	
+
 	
 }

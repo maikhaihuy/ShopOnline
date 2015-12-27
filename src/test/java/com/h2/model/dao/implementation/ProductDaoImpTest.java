@@ -34,7 +34,7 @@ public class ProductDaoImpTest extends TestCase{
 		ProductDao instance = (ProductDao)appCtx.getBean("productDao");
 		
         List<Product> expResult = null;      
-        List<Product> result = instance.getListProduct();
+        List<Product> result = instance.getListProduct(1);
         if (result == expResult){
             fail("The test case is a prototype.");
         }
@@ -56,20 +56,6 @@ public class ProductDaoImpTest extends TestCase{
     }
 	
 	@Test
-    public void testGetListProductByIdCategoryProductName() {
-        System.out.println("getListListProductByIdCategoryProductName");
-        ApplicationContext appCtx = new ClassPathXmlApplicationContext("beans-service.xml");
-		ProductDao instance = (ProductDao)appCtx.getBean("productDao");
-		
-        List<Product> expResult = null;      
-        List<Product> result = instance.getListProductByIdCategoryProductName(1, "pro", 2);
-        if (result == expResult){
-            fail("The test case is a prototype.");
-        }
-        System.out.println("list size: " + result.size());
-    }
-	
-	@Test
     public void testGetListDiscountProduct() {
         System.out.println("getListDiscountProduct");
         ApplicationContext appCtx = new ClassPathXmlApplicationContext("beans-service.xml");
@@ -84,17 +70,48 @@ public class ProductDaoImpTest extends TestCase{
     }
 	
 	@Test
+    public void testGetListProductByIdCategoryProductName() {
+        System.out.println("getListListProductByIdCategoryProductName");
+        ApplicationContext appCtx = new ClassPathXmlApplicationContext("beans-service.xml");
+		ProductDao instance = (ProductDao)appCtx.getBean("productDao");
+		
+        List<Product> expResult = null;      
+        List<Product> result = instance.getListProductByIdCategoryProductName(1, "pro", 2);
+        if (result == expResult){
+            fail("The test case is a prototype.");
+        }
+        System.out.println("list size: " + result.size());
+    }
+	
+	@Test
+    public void testGetListProductByCategoryId() {
+        System.out.println("getListProductByCategoryId");
+        ApplicationContext appCtx = new ClassPathXmlApplicationContext("beans-service.xml");
+		ProductDao instance = (ProductDao)appCtx.getBean("productDao");
+		
+        List<Product> expResult = null;      
+        List<Product> result = instance.getListProductByIdCategory(1, 1);
+        if (result == expResult){
+            fail("The test case is a prototype.");
+        }
+        System.out.println("list size: " + result.size());
+    }
+	
+	
+	
+	@Test
     public void testSearchProduct() {
         System.out.println("getSearchProduct");
         ApplicationContext appCtx = new ClassPathXmlApplicationContext("beans-service.xml");
 		ProductDao instance = (ProductDao)appCtx.getBean("productDao");
 		
         List<Product> expResult = null;      
-        List<Product> result = instance.searchProductByCategoryBrandColorSizePriceName(1, 1, 1, 1, 0, 0, "", 1);
+        List<Product> result = instance.searchProductByCategoryBrandColorSizePriceName(1, 1, 1, 1, 0, 100, "", 1);
         if (result == expResult){
             fail("The test case is a prototype.");
         }
         System.out.println("list size: " + result.size());
     }
+	
 	
 }
