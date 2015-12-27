@@ -279,4 +279,17 @@ public class ProductDaoImp extends AbstractHbnDao<Product> implements ProductDao
 	}
 
 	
+	// count price of product = productPrice + Tax*productPrice
+	public float countPriceOfProductByProductId(int productId){
+		float price = 0;	
+		
+		Product product = getProductById(productId);
+		price = product.getProductPrice();
+		// Get tax value
+		int taxValue = product.getCategory().getTax().getTaxValue();
+		price = price + price*taxValue/100;
+		
+		return price;
+	}
+	
 }

@@ -113,5 +113,15 @@ public class ProductDaoImpTest extends TestCase{
         System.out.println("list size: " + result.size());
     }
 	
+	@Test
+    public void testCountPriceOfProductByProductId() {
+        System.out.println("countPriceOfProductByProductId");
+        ApplicationContext appCtx = new ClassPathXmlApplicationContext("beans-service.xml");
+		ProductDao instance = (ProductDao)appCtx.getBean("productDao");
+		
+        float price = instance.countPriceOfProductByProductId(1);
+        System.out.println("lprice: " + price);
+    }
+	
 	
 }

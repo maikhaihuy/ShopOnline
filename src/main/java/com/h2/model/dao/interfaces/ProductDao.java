@@ -24,4 +24,6 @@ public interface ProductDao extends Dao<Product>{
 			int categoryId, int brandId, int colorId, int sizeId, 
 			float fromPrice, float toPrice, String productName, int times);
 	
+	public float countPriceOfProductByProductId(int productId);
+	
 }
