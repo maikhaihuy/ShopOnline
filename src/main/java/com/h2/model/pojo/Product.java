@@ -16,6 +16,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "product", catalog="shoedb")
 public class Product implements Serializable{
@@ -148,6 +150,7 @@ public class Product implements Serializable{
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "categoryId", nullable = false)
+	@JsonIgnore
 	public Category getCategory() {
 		return category;
 	}
@@ -158,6 +161,7 @@ public class Product implements Serializable{
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "brandId", nullable = false)
+	@JsonIgnore
 	public Brand getBrand() {
 		return brand;
 	}
@@ -185,6 +189,7 @@ public class Product implements Serializable{
 	}
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "product")
+	@JsonIgnore
 	public List<DetailProduct> getDetailProductList() {
 		return detailProductList;
 	}
@@ -194,6 +199,7 @@ public class Product implements Serializable{
 	}
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "product")
+	@JsonIgnore
 	public List<DiscountInfo> getDiscountInfoList() {
 		return discountInfoList;
 	}
@@ -203,6 +209,7 @@ public class Product implements Serializable{
 	}
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "product")
+	@JsonIgnore
 	public List<Discount> getDiscountList() {
 		return discountList;
 	}

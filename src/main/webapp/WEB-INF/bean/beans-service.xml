@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+   	   xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xsi:schemaLocation="
+        http://www.springframework.org/schema/beans 
+        http://www.springframework.org/schema/beans/spring-beans-4.1.xsd
+        http://www.springframework.org/schema/tx
+        http://www.springframework.org/schema/tx/spring-tx-4.1.xsd
+        http://www.springframework.org/schema/util
+        http://www.springframework.org/schema/util/spring-util-4.1.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+        
+   
+    
+    <context:property-placeholder location="classpath:/environment.properties" />
+	<bean id="dataSource" 
+		class="org.apache.commons.dbcp2.BasicDataSource" destroy-method="close"
+		p:driverClassName="${dataSource.driverClassName}"
+		p:url="${dataSource.url}"
+		p:username="${dataSource.username}"
+		p:password="${dataSource.password}" 
+		p:initialSize="10"      
+		p:maxIdle="1" />
+
+   	<util:properties id="hibernateProperties">
+		<prop key="hibernate.dialect">
+		org.hibernate.dialect.MySQL5InnoDBDialect
+		</prop>
+		<prop key="hibernate.show_sql">false</prop>
+	</util:properties>
+		
+	<bean id="sessionFactory"
+		class="org.springframework.orm.hibernate4.LocalSessionFactoryBean"
+		p:dataSource-ref="dataSource"
+		p:packagesToScan="com.h2.model.dao.implementation"
+		p:hibernateProperties-ref="hibernateProperties">
+		<property name="annotatedClasses">
+			<list>
+				<value>com.h2.model.pojo.Brand</value>
+				<value>com.h2.model.pojo.Category</value>
+				<value>com.h2.model.pojo.City</value>
+				<value>com.h2.model.pojo.Color</value>
+				<value>com.h2.model.pojo.DetailOrder</value>
+				<value>com.h2.model.pojo.DetailProduct</value>
+				<value>com.h2.model.pojo.Discount</value>
+				<value>com.h2.model.pojo.DiscountInfo</value>
+				<value>com.h2.model.pojo.District</value>
+				<value>com.h2.model.pojo.Order</value>
+				<value>com.h2.model.pojo.OrderStatus</value>
+				<value>com.h2.model.pojo.Product</value>
+				<value>com.h2.model.pojo.Recipient</value>
+				<value>com.h2.model.pojo.Roles</value>
+				<value>com.h2.model.pojo.Size</value>
+				<value>com.h2.model.pojo.Tax</value>
+				<value>com.h2.model.pojo.Token</value>
+				<value>com.h2.model.pojo.TokenType</value>
+				<value>com.h2.model.pojo.User</value>
+				<value>com.h2.model.pojo.Tag</value>
+			</list>
+		</property>
+	</bean>
+		
+	<bean id="transactionManager"
+		class="org.springframework.orm.hibernate4.HibernateTransactionManager"
+		p:sessionFactory-ref="sessionFactory" />
+	
+		
+	<tx:annotation-driven/>
+	<context:component-scan base-package="com.h2.model.dao.implementation" /> 
+	<context:component-scan base-package="com.h2.controller" />
+	
+</beans>
