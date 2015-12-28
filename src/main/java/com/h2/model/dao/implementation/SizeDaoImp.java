@@ -35,7 +35,7 @@ public class SizeDaoImp  extends AbstractHbnDao<Size> implements SizeDao {
         Query query = null;
                
         try{          	
-            hql =  "SELECT d.size FROM DetailProduct d WHERE d.product = :product ORDER BY d.size.sizeName";
+            hql =  "SELECT DISTINCT d.size FROM DetailProduct d WHERE d.product = :product ORDER BY d.size.sizeName";
             query = getSession().createQuery(hql);
             query.setParameter("product", product);
             listSize = query.list();

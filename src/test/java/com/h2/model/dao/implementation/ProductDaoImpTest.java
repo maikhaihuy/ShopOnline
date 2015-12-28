@@ -10,6 +10,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.h2.model.dao.interfaces.ProductDao;
 import com.h2.model.pojo.Product;
+import com.h2.model.pojo.SubProduct;
 
 public class ProductDaoImpTest extends TestCase{
 	
@@ -121,6 +122,20 @@ public class ProductDaoImpTest extends TestCase{
 		
         float price = instance.countPriceOfProductByProductId(1);
         System.out.println("lprice: " + price);
+    }
+	
+	@Test
+    public void testGetSubProductById() {
+        System.out.println("getSubProductById");
+        ApplicationContext appCtx = new ClassPathXmlApplicationContext("beans-service.xml");
+		ProductDao instance = (ProductDao)appCtx.getBean("productDao");
+		
+		SubProduct expResult = null;      
+        SubProduct result = instance.getInfoOfProductByProductId(1);
+        if (result == expResult){
+            fail("The test case is a prototype.");
+        }
+        System.out.println("productName: " + result.getBrand().getBrandId());
     }
 	
 	

@@ -35,7 +35,7 @@ public class ColorDaoImp extends AbstractHbnDao<Color> implements ColorDao{
         Query query = null;
                
         try{          	
-            hql =  "SELECT d.color FROM DetailProduct d WHERE d.product = :product ORDER BY d.color.colorName";
+            hql =  "SELECT DISTINCT d.color FROM DetailProduct d WHERE d.product = :product ORDER BY d.color.colorName";
             query = getSession().createQuery(hql);
             query.setParameter("product", product);
             listColor = query.list();

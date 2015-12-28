@@ -297,13 +297,32 @@ public class ProductDaoImp extends AbstractHbnDao<Product> implements ProductDao
 	// Get information of product
 	public SubProduct getInfoOfProductByProductId(int productId) {
 		SubProduct subProduct = new SubProduct();
-		Product product = getProductById(productId);
+		Category category = new Category();
+		Brand brand = new Brand();
+		String hql = "";
+		Query query = null; 
+		// Get product and category and brand
+		try{                	
+			hql = "select p.category, p.brand from  Product p  WHERE p.productId = :productId ";
+            query = getSession().createQuery(hql);
+            query.setParameter("productId", productId);
+            List<Object[]> ds = query.list();
+            if (ds.size() == 1){
+            	Object[] obj = ds.get(0);
+            	category = (Category) obj[0];
+            	brand = (Brand)obj[1];
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            //log.error(e);          
+        } 
+		
 		List<Color> listColorOfProduct = colorDao.getListColorOfProduct(productId);
 		List<Size> listSizeOfProduct = sizeDao.getListSizeOfProduct(productId);
 		subProduct.setListColor(listColorOfProduct);
 		subProduct.setListSize(listSizeOfProduct);
-		subProduct.setCategory(product.getCategory());
-		subProduct.setBrand(product.getBrand());
+		subProduct.setCategory(category);
+		subProduct.setBrand(brand);
 		return subProduct;
 	}
 }
