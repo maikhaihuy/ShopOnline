@@ -1,5 +1,7 @@
 package com.h2.model.dao.implementation;
 
+import java.util.List;
+
 import org.hibernate.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -8,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.h2.model.dao.interfaces.AbstractHbnDao;
 import com.h2.model.dao.interfaces.DiscountInfoDao;
 import com.h2.model.dao.interfaces.ProductDao;
+import com.h2.model.pojo.Color;
 import com.h2.model.pojo.DiscountInfo;
 import com.h2.model.pojo.Product;
 
@@ -53,6 +56,28 @@ public class DiscountInfoDaoImp extends AbstractHbnDao<DiscountInfo> implements 
 	        //log.error(e);
 	
 	    } 
+	}
+
+	// Get discountInfo by discount id
+	public DiscountInfo getDiscountInfoByDiscountId(int discountId) {
+		DiscountInfo discountInfo = new DiscountInfo();
+		String hql = "";
+		Query query = null; 
+		try{                	
+			hql = "select p.discountInfo from Discount p  WHERE p.discountId = :discountId ";
+            query = getSession().createQuery(hql);
+            query.setParameter("discountId", discountId);
+            List<Object> ds = query.list();
+            if (ds.size() == 1){
+            	Object obj = ds.get(0);
+            	discountInfo = (DiscountInfo) obj;           	
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            //log.error(e);          
+        } 
+		
+		return discountInfo;
 	}
 	
 }

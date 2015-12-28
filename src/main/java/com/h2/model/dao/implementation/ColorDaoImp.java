@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
+
 import org.hibernate.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -45,6 +46,28 @@ public class ColorDaoImp extends AbstractHbnDao<Color> implements ColorDao{
             //log.error(e);           
         } 
         return listColor;
+	}
+
+	// Get color of detail product
+	public Color getColorByDetailProductId(int detailProductId) {
+		Color color = new Color();
+		String hql = "";
+		Query query = null; 
+		try{                	
+			hql = "select p.color from DetailProduct p  WHERE p.detailProductId = :detailProductId ";
+            query = getSession().createQuery(hql);
+            query.setParameter("detailProductId", detailProductId);
+            List<Object> ds = query.list();
+            if (ds.size() == 1){
+            	Object obj = ds.get(0);
+            	color = (Color) obj;           	
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            //log.error(e);          
+        } 
+		
+		return color;
 	}
 	
 }

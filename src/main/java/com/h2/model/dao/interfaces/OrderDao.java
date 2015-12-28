@@ -11,4 +11,5 @@ public interface OrderDao extends Dao<Order>{
 	public List<Order> getListOrder();
 	public void updateStatusOfOrder(int orderId, int orderStatusId);
 	public float getTransferCost(int districtId);
+	public Order getOrderByDetailOrderId(int detailOrderId);
 }

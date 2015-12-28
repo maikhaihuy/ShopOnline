@@ -11,7 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.h2.model.dao.interfaces.AbstractHbnDao;
 import com.h2.model.dao.interfaces.ProductDao;
 import com.h2.model.dao.interfaces.SizeDao;
-import com.h2.model.pojo.Color;
 import com.h2.model.pojo.Product;
 import com.h2.model.pojo.Size;
 
@@ -45,6 +44,28 @@ public class SizeDaoImp  extends AbstractHbnDao<Size> implements SizeDao {
             //log.error(e);           
         } 
         return listSize;
+	}
+
+	// Get size of detail product 
+	public Size getSizeByDetailProductId(int detailProductId) {
+		Size size = new Size();
+		String hql = "";
+		Query query = null; 
+		try{                	
+			hql = "select p.size from DetailProduct p  WHERE p.detailProductId = :detailProductId ";
+            query = getSession().createQuery(hql);
+            query.setParameter("detailProductId", detailProductId);
+            List<Object> ds = query.list();
+            if (ds.size() == 1){
+            	Object obj = ds.get(0);
+            	size = (Size) obj;           	
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            //log.error(e);          
+        } 
+		
+		return size;
 	}
 	
 }

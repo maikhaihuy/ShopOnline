@@ -6,4 +6,5 @@ import com.h2.model.pojo.City;
 
 public interface CityDao extends Dao<City>{
 	public List<City> getListCity();
+	public City getCityByDistrictId(int districtId);
 }

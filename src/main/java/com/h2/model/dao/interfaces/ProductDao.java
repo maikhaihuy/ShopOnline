@@ -29,4 +29,9 @@ public interface ProductDao extends Dao<Product>{
 	
 	public SubProduct getInfoOfProductByProductId(int productId);
 	
+	public Product getProductByDetailProductId(int detailProductId);
+	public Product getProductByDiscountId(int discountId);
+	public Product getProductByDiscountInfoId(int discountInfoId);
+	
+	
 }

@@ -3,11 +3,6 @@ package com.h2.model.dao.implementation;
 import java.util.ArrayList;
 import java.util.List;
 
-
-
-
-
-
 import org.hibernate.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -82,6 +77,28 @@ public class DetailProductDaoImp extends AbstractHbnDao<DetailProduct> implement
             //log.error(e);
 
         } 
+	}
+
+	// Get detail product by order id
+	public DetailProduct getDetailProductByDetailOrderId(int detailOrderId) {
+		DetailProduct detailProduct = new DetailProduct();
+		String hql = "";
+		Query query = null; 
+		try{                	
+			hql = "select p.detailProduct from  DetailOrder p  WHERE p.detailOrderId = :detailOrderId ";
+            query = getSession().createQuery(hql);
+            query.setParameter("detailOrderId", detailOrderId);
+            List<Object> ds = query.list();
+            if (ds.size() == 1){
+            	Object obj = ds.get(0);
+            	detailProduct = (DetailProduct) obj;           	
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            //log.error(e);          
+        } 
+		
+		return detailProduct;
 	}
 	
 }

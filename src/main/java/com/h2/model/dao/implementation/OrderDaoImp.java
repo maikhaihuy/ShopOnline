@@ -164,5 +164,27 @@ public class OrderDaoImp extends AbstractHbnDao<Order> implements OrderDao{
 		cost = cost + city.getCityCost();
 		return cost;
 	}
+
+	// Get order by detail order id
+	public Order getOrderByDetailOrderId(int detailOrderId) {
+		Order order = new Order();
+		String hql = "";
+		Query query = null; 
+		try{                	
+			hql = "select p.order from  DetailOrder p  WHERE p.detailOrderId = :detailOrderId ";
+            query = getSession().createQuery(hql);
+            query.setParameter("detailOrderId", detailOrderId);
+            List<Object> ds = query.list();
+            if (ds.size() == 1){
+            	Object obj = ds.get(0);
+            	order = (Order) obj;           	
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            //log.error(e);          
+        } 
+		
+		return order;
+	}
 	
 }

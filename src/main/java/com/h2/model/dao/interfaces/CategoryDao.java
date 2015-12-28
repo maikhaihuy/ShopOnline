@@ -6,5 +6,5 @@ import com.h2.model.pojo.Category;
 
 public interface CategoryDao extends Dao<Category>{
 	public List<Category> getListCategory();
-	//public Category getCategoryByProductId(int productId);
+	public Category getCategoryByProductId(int productId);
 }

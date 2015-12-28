@@ -12,4 +12,6 @@ public interface UserDao extends Dao<User> {
 	public String hashPassword(String userPassword);
 	public boolean checkUserNameExist(String userName);
 	public boolean checkUserEmailExist(String userEmail);
+	public User getUserByOrderId(int orderId);
+	public User getUserByTokenId(int tokenId);
 }

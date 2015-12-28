@@ -2,8 +2,6 @@ package com.h2.model.dao.implementation;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
-
 import org.hibernate.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -177,6 +175,50 @@ public class UserDaoImp extends AbstractHbnDao<User> implements UserDao {
 	
 	        } 
         }
+	}
+
+	// Get user by order Id
+	public User getUserByOrderId(int orderId) {
+		User user = new User();
+		String hql = "";
+		Query query = null; 
+		try{                	
+			hql = "select p.user from  Order p  WHERE p.orderId = :orderId ";
+            query = getSession().createQuery(hql);
+            query.setParameter("orderId", orderId);
+            List<Object> ds = query.list();
+            if (ds.size() == 1){
+            	Object obj = ds.get(0);
+            	user = (User) obj;           	
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            //log.error(e);          
+        } 
+		
+		return user;
+	}		
+
+	// Get user by token id
+	public User getUserByTokenId(int tokenId) {
+		User user = new User();
+		String hql = "";
+		Query query = null; 
+		try{                	
+			hql = "select p.user from  Token p  WHERE p.tokenId = :tokenId ";
+            query = getSession().createQuery(hql);
+            query.setParameter("tokenId", tokenId);
+            List<Object> ds = query.list();
+            if (ds.size() == 1){
+            	Object obj = ds.get(0);
+            	user = (User) obj;           	
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            //log.error(e);          
+        } 
+		
+		return user;
 	}
 
 	

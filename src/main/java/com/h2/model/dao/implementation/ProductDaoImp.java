@@ -19,7 +19,6 @@ import com.h2.model.dao.interfaces.SizeDao;
 import com.h2.model.pojo.Brand;
 import com.h2.model.pojo.Category;
 import com.h2.model.pojo.Color;
-import com.h2.model.pojo.DetailProduct;
 import com.h2.model.pojo.Product;
 import com.h2.model.pojo.Size;
 import com.h2.model.pojo.SubProduct;
@@ -324,5 +323,70 @@ public class ProductDaoImp extends AbstractHbnDao<Product> implements ProductDao
 		subProduct.setCategory(category);
 		subProduct.setBrand(brand);
 		return subProduct;
+	}
+
+	// Get product by detail product id
+	public Product getProductByDetailProductId(int detailProductId) {
+		Product product = new Product();
+		String hql = "";
+		Query query = null; 
+		try{                	
+			hql = "select p.product from DetailProduct p  WHERE p.detailProductId = :detailProductId ";
+            query = getSession().createQuery(hql);
+            query.setParameter("detailProductId", detailProductId);
+            List<Object> ds = query.list();
+            if (ds.size() == 1){
+            	Object obj = ds.get(0);
+            	product = (Product) obj;           	
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            //log.error(e);          
+        } 
+		
+		return product;
+	}
+
+	// Get product by discount id
+	public Product getProductByDiscountId(int discountId) {
+		Product product = new Product();
+		String hql = "";
+		Query query = null; 
+		try{                	
+			hql = "select p.product from Discount p  WHERE p.discountId = :discountId ";
+            query = getSession().createQuery(hql);
+            query.setParameter("discountId", discountId);
+            List<Object> ds = query.list();
+            if (ds.size() == 1){
+            	Object obj = ds.get(0);
+            	product = (Product) obj;           	
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            //log.error(e);          
+        } 
+		
+		return product;
+	}
+
+	public Product getProductByDiscountInfoId(int discountInfoId) {
+		Product product = new Product();
+		String hql = "";
+		Query query = null; 
+		try{                	
+			hql = "select p.product from DiscountInfo p  WHERE p.discountInfoId = :discountInfoId ";
+            query = getSession().createQuery(hql);
+            query.setParameter("discountInfoId", discountInfoId);
+            List<Object> ds = query.list();
+            if (ds.size() == 1){
+            	Object obj = ds.get(0);
+            	product = (Product) obj;           	
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            //log.error(e);          
+        } 
+		
+		return product;
 	}
 }

@@ -16,4 +16,5 @@ public interface Dao <T extends Object>{
 	public int count(String className);
 	public boolean exists(Serializable id, Class<T> domainClass);
 	public T save(T t);
+	
 }

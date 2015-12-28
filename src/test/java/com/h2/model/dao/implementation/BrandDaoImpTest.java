@@ -93,4 +93,17 @@ public class BrandDaoImpTest extends TestCase{
         instance.update(brand);
         
     }
+	
+	@Test
+    public void testgetBrandByProductId() {
+		System.out.println("getBrandByProductId");
+        ApplicationContext appCtx = new ClassPathXmlApplicationContext("beans-service.xml");
+		BrandDao instance = (BrandDao)appCtx.getBean("brandDao");
+		
+		Brand brand = instance.getBrandByProductId(1);
+		if (brand == null){
+            fail("The test case is a prototype.");
+        }
+		System.out.println(" Brand: " + brand.getBrandName());
+    }
 }

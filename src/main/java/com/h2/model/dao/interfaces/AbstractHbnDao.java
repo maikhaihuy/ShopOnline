@@ -170,4 +170,6 @@ public abstract class AbstractHbnDao <T extends Object> implements Dao<T> {
 		return t;
 	}
 	
+	
+	
 }

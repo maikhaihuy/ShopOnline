@@ -1,5 +1,8 @@
 package com.h2.model.dao.implementation;
 
+import java.util.List;
+
+import org.hibernate.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,6 +32,28 @@ public class RecipientDaoImp extends AbstractHbnDao<Recipient> implements Recipi
 		recipient.setDistrict(district);
 		
 		save(recipient);
+		
+		return recipient;
+	}
+	
+	// Get recipient by order id
+	public Recipient getRecipientByOrderId(int orderId) {
+		Recipient recipient = new Recipient();
+		String hql = "";
+		Query query = null; 
+		try{                	
+			hql = "select p.recipient from  Order p  WHERE p.orderId = :orderId ";
+            query = getSession().createQuery(hql);
+            query.setParameter("orderId", orderId);
+            List<Object> ds = query.list();
+            if (ds.size() == 1){
+            	Object obj = ds.get(0);
+            	recipient = (Recipient) obj;           	
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            //log.error(e);          
+        } 
 		
 		return recipient;
 	}
