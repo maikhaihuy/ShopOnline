@@ -3,6 +3,7 @@ package com.h2.model.dao.interfaces;
 import java.util.List;
 
 import com.h2.model.pojo.Product;
+import com.h2.model.pojo.SubProduct;
 
 public interface ProductDao extends Dao<Product>{
 	public List<Product> getListProduct(int times);
@@ -25,5 +26,7 @@ public interface ProductDao extends Dao<Product>{
 			float fromPrice, float toPrice, String productName, int times);
 	
 	public float countPriceOfProductByProductId(int productId);
+	
+	public SubProduct getInfoOfProductByProductId(int productId);
 	
 }

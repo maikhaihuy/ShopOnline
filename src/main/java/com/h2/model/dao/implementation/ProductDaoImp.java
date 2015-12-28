@@ -22,6 +22,7 @@ import com.h2.model.pojo.Color;
 import com.h2.model.pojo.DetailProduct;
 import com.h2.model.pojo.Product;
 import com.h2.model.pojo.Size;
+import com.h2.model.pojo.SubProduct;
 
 @Repository ("productDao")
 @Transactional
@@ -291,5 +292,18 @@ public class ProductDaoImp extends AbstractHbnDao<Product> implements ProductDao
 		
 		return price;
 	}
+
 	
+	// Get information of product
+	public SubProduct getInfoOfProductByProductId(int productId) {
+		SubProduct subProduct = new SubProduct();
+		Product product = getProductById(productId);
+		List<Color> listColorOfProduct = colorDao.getListColorOfProduct(productId);
+		List<Size> listSizeOfProduct = sizeDao.getListSizeOfProduct(productId);
+		subProduct.setListColor(listColorOfProduct);
+		subProduct.setListSize(listSizeOfProduct);
+		subProduct.setCategory(product.getCategory());
+		subProduct.setBrand(product.getBrand());
+		return subProduct;
+	}
 }
