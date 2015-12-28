@@ -14,6 +14,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "tokentype", catalog="shoedb")
 public class TokenType implements Serializable {
@@ -52,6 +54,7 @@ public class TokenType implements Serializable {
 	}
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "tokenType")
+	@JsonIgnore
 	public List<Token> getTokenList() {
 		return tokenList;
 	}

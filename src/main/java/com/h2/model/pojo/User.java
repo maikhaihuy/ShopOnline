@@ -16,6 +16,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "user", catalog="shoedb")
 public class User implements Serializable{
@@ -129,6 +131,7 @@ public class User implements Serializable{
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "districtId", nullable = false)
+	@JsonIgnore
 	public District getDistrict() {
 		return district;
 	}
@@ -139,6 +142,7 @@ public class User implements Serializable{
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "roleId", nullable = false)
+	@JsonIgnore
 	public Roles getRole() {
 		return role;
 	}
@@ -148,6 +152,7 @@ public class User implements Serializable{
 	}
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+	@JsonIgnore
 	public List<Order> getOrderList() {
 		return orderList;
 	}
@@ -157,6 +162,7 @@ public class User implements Serializable{
 	}
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+	@JsonIgnore
 	public List<Token> getTokenList() {
 		return tokenList;
 	}

@@ -66,6 +66,7 @@ public class DetailProduct implements Serializable{
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "productId", nullable = false)
+	@JsonIgnore
 	public Product getProduct() {
 		return product;
 	}
@@ -76,6 +77,7 @@ public class DetailProduct implements Serializable{
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "colorId", nullable = false)
+	@JsonIgnore
 	public Color getColor() {
 		return color;
 	}
@@ -86,6 +88,7 @@ public class DetailProduct implements Serializable{
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "sizeId", nullable = false)
+	@JsonIgnore
 	public Size getSize() {
 		return size;
 	}
@@ -104,6 +107,7 @@ public class DetailProduct implements Serializable{
 	}
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "detailProduct")
+	@JsonIgnore
 	public List<DetailOrder> getDetailOrderList() {
 		return detailOrderList;
 	}

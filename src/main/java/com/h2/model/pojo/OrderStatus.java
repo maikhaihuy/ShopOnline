@@ -14,6 +14,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "orderstatus", catalog="shoedb")
 public class OrderStatus implements Serializable{
@@ -52,6 +54,7 @@ public class OrderStatus implements Serializable{
 	}
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "orderStatus")
+	@JsonIgnore
 	public List<Order> getOrderList() {
 		return orderList;
 	}

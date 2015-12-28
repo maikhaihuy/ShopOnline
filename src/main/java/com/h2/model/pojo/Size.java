@@ -15,6 +15,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "size", catalog = "shoedb",uniqueConstraints = {@UniqueConstraint(columnNames = "sizeName")})
 public class Size implements Serializable{
@@ -53,6 +55,7 @@ public class Size implements Serializable{
 	}
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "size")
+	@JsonIgnore
 	public List<DetailProduct> getDetailProductList() {
 		return detailProductList;
 	}

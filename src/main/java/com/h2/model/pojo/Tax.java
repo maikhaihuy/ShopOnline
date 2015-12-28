@@ -15,6 +15,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "tax", catalog="shoedb")
 public class Tax implements Serializable{
@@ -52,6 +54,7 @@ public class Tax implements Serializable{
 	}
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "tax")
+	@JsonIgnore
 	public List<Category> getCategoryList() {
 		return categoryList;
 	}

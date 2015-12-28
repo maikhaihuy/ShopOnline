@@ -13,6 +13,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "detailorder", catalog="shoedb")
 public class DetailOrder implements Serializable{
@@ -77,6 +79,7 @@ public class DetailOrder implements Serializable{
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "orderId", nullable = false)
+	@JsonIgnore
 	public Order getOrder() {
 		return order;
 	}
@@ -87,6 +90,7 @@ public class DetailOrder implements Serializable{
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "detailProductId", nullable = false)
+	@JsonIgnore
 	public DetailProduct getDetailProduct() {
 		return detailProduct;
 	}
