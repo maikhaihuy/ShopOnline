@@ -67,12 +67,12 @@ public class TokenDaoImpTest extends TestCase{
         ApplicationContext appCtx = new ClassPathXmlApplicationContext("beans-service.xml");
 		TokenDao instance = (TokenDao)appCtx.getBean("tokenDao");
 		
-		String expResult = null;      
-        String result = instance.getForgotTokenStringByUserName("user1");
+		Token expResult = null;      
+		Token result = instance.getForgotTokenStringByUserName("user1");
         if (result == expResult){
             fail("The test case is a prototype.");
         }
-        System.out.println("list size: " + result);
+        System.out.println("list size: " + result.getTokenString());
     }
 	
 	@Test
@@ -81,11 +81,11 @@ public class TokenDaoImpTest extends TestCase{
         ApplicationContext appCtx = new ClassPathXmlApplicationContext("beans-service.xml");
 		TokenDao instance = (TokenDao)appCtx.getBean("tokenDao");
 		
-		String expResult = null;      
-        String result = instance.getRegisterTokenStringByUserName("user1");
+		Token expResult = null;      
+		Token result = instance.getRegisterTokenStringByUserName("user1");
         if (result == expResult){
             fail("The test case is a prototype.");
         }
-        System.out.println("list size: " + result);
+        System.out.println("list size: " + result.getTokenString());
     }
 }

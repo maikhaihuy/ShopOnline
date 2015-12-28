@@ -66,7 +66,9 @@ public class UserDaoImp extends AbstractHbnDao<User> implements UserDao {
 	}
 
 	// Update userPassword with userName
-	public void updateUserPassword(String userName, String userPassword) {
+	// Return user with password = ""
+	public User updateUserPassword(String userName, String userPassword) {
+		User user = new User();
 		Query query= null;
         String hql = "";
         String hashPassword = hashPassword(userPassword);
@@ -85,6 +87,10 @@ public class UserDaoImp extends AbstractHbnDao<User> implements UserDao {
 	
 	        } 
         }
+        
+        user = getUserByUserName(userName);
+        user.setUserPassword("");
+        return user;
 	}
 
 	// Create new user

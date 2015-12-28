@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -56,7 +55,7 @@ public class TokenDaoImp extends AbstractHbnDao<Token> implements TokenDao {
 	}
 		
 	// Get token string of user name when registering (tokenTypeId = 1)
-	public String getRegisterTokenStringByUserName(String userName) {
+	public Token getRegisterTokenStringByUserName(String userName) {
 		String tokenString = null;
 		Query query = null;
 		String hql = "";
@@ -80,13 +79,13 @@ public class TokenDaoImp extends AbstractHbnDao<Token> implements TokenDao {
             //log.error(e);          
         } 
 		if (listToken.size() == 1){
-			return listToken.get(0).getTokenString();
+			return listToken.get(0);
 		}
-		return tokenString;
+		return null;
 	}
 	
 	// Get token string of user name when forgot password  (tokenTypeId = 2)
-	public String getForgotTokenStringByUserName(String userName) {
+	public Token getForgotTokenStringByUserName(String userName) {
 		String tokenString = null;
 		Query query = null;
 		String hql = "";
@@ -109,9 +108,9 @@ public class TokenDaoImp extends AbstractHbnDao<Token> implements TokenDao {
             //log.error(e);          
         } 
 		if (listToken.size() == 1){
-			return listToken.get(0).getTokenString();
+			return listToken.get(0);
 		}
-		return tokenString;
+		return null;
 	}
 	
 	// Create token when user registers
