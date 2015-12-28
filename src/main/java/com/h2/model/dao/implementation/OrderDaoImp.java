@@ -171,13 +171,14 @@ public class OrderDaoImp extends AbstractHbnDao<Order> implements OrderDao{
 
 	// Update status of order
 	// If status == 5, 6, setting isDeleted = 1
-	public void updateStatusOfOrder(int orderId, int orderStatusId) {
+	public Order updateStatusOfOrder(int orderId, int orderStatusId) {
 		Query query= null;
         String hql = "";
+        Order order = get(orderId, Order.class);
         // Check if orderStatusId = 5 and time to cancel order is over then do nothing
         if (orderStatusId == 5){
         	if (!checkTimeCancelOrder(orderId)){
-        		return;
+        		return order;
         	}
         }
         // Get orderStatus
@@ -205,7 +206,7 @@ public class OrderDaoImp extends AbstractHbnDao<Order> implements OrderDao{
 
         } 
     
-		
+        return order = get(orderId, Order.class);
 	}
 	
 	// Get transfer cost of order by districtId and cityId
