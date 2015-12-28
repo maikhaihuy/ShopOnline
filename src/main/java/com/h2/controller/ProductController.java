@@ -21,22 +21,24 @@ import com.h2.model.pojo.Product;
 @RequestMapping("/product")
 public class ProductController {
 	@Autowired
-	ProductDao productDao;
+	private ProductDao productDao;
 	
-	@RequestMapping(value="/category/{idCate}/name/{namePro}",
+	@RequestMapping(value="/category/{idCate}/name/{namePro}/session/{session}",
 					method=RequestMethod.GET)
 	@ResponseBody
-	public ResponseEntity<List<Product>> GetProducts(@PathVariable("idCate") int idCate, @PathVariable("namePro") String namePro){
-		return new ResponseEntity<List<Product>>(null);
+	public ResponseEntity<List<Product>> GetProducts(@PathVariable("idCate") int idCate, 
+			@PathVariable("namePro") String namePro,@PathVariable("session") int session){
+		List<Product> listProduct = productDao.getListProductByIdCategoryProductName(idCate, namePro, session);
+		return new ResponseEntity<List<Product>>(listProduct, HttpStatus.OK);
 	}
 	
 	@RequestMapping(value="/newproducts",
 					method=RequestMethod.GET)
 	@ResponseBody
 	public ResponseEntity<List<Product>> GetNewProducts(){
-		ApplicationContext appCtx = new ClassPathXmlApplicationContext("beans-service.xml");
-		ProductDao instance = (ProductDao)appCtx.getBean("productDao");
-		this.productDao = instance;
+		//ApplicationContext appCtx = new ClassPathXmlApplicationContext("beans-service.xml");
+		//ProductDao instance = (ProductDao)appCtx.getBean("productDao");
+		//this.productDao = instance;
 		List<Product> listNewProduct = productDao.getListNewProduct();
 		return new ResponseEntity<List<Product>>(listNewProduct, HttpStatus.OK);
 	}
@@ -45,13 +47,39 @@ public class ProductController {
 					method=RequestMethod.GET)
 	@ResponseBody
 	public ResponseEntity<List<Product>> GetDiscountProducts(){
-		return new ResponseEntity<List<Product>>(null);
+		List<Product> listDiscountProduct = productDao.getListDiscountProduct();
+		return new ResponseEntity<List<Product>>(listDiscountProduct, HttpStatus.OK);
 	}
 	
 	@RequestMapping(value="/{idProduct}",
 					method=RequestMethod.GET)
 	@ResponseBody
 	public ResponseEntity<Product> GetProduct(@PathVariable("idProduct") int idProduct){
-		return new ResponseEntity<Product>(null);
+		Product product = productDao.getProductById(idProduct);
+		return new ResponseEntity<Product>(product, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value="/getAllProduct/session/{session}",
+			method=RequestMethod.GET)
+	@ResponseBody
+	public ResponseEntity<List<Product>> GetAllProduct(@PathVariable("session") int session){
+		List<Product> listProduct = productDao.getListProduct(session);
+		return new ResponseEntity<List<Product>>(listProduct, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value="/brand/{idBrand}/session/{session}",
+			method=RequestMethod.GET)
+	@ResponseBody
+	public ResponseEntity<List<Product>> GetProductByBrand(@PathVariable("idBrand") int idBrand, @PathVariable("session") int session){
+		List<Product> listProduct = productDao.getListProductByIdBrand(idBrand, session);
+		return new ResponseEntity<List<Product>>(listProduct, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value="/category/{idCategory}/session/{session}",
+			method=RequestMethod.GET)
+	@ResponseBody
+	public ResponseEntity<List<Product>> GetProductByCategory(@PathVariable("idCategory") int idCategory, @PathVariable("session") int session){
+		List<Product> listProduct = productDao.getListProductByIdCategory(idCategory, session);
+		return new ResponseEntity<List<Product>>(listProduct, HttpStatus.OK);
 	}
 }

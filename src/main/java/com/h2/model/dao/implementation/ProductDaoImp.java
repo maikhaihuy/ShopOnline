@@ -48,8 +48,10 @@ public class ProductDaoImp extends AbstractHbnDao<Product> implements ProductDao
 		try{ 
 			hql =  "from Product p ORDER BY p.productName" ;  
 			query = getSession().createQuery(hql); 
-			query.setFirstResult(n);
-			query.setMaxResults(m);
+			if (times > 0){
+				query.setFirstResult(n);
+				query.setMaxResults(m);
+			}
 			listProduct = query.list();
 		} catch (Exception e) {
 			e.printStackTrace();          
@@ -141,8 +143,10 @@ public class ProductDaoImp extends AbstractHbnDao<Product> implements ProductDao
             query = getSession().createQuery(hql);   
             query.setString("productName", "%"+productName+"%");
             query.setParameter("category", category);
-            query.setFirstResult(n);
-			query.setMaxResults(m);
+            if (times > 0){
+	            query.setFirstResult(n);
+				query.setMaxResults(m);
+            }
             listProduct =  query.list();
         } catch (Exception e) {
             e.printStackTrace();
@@ -167,8 +171,10 @@ public class ProductDaoImp extends AbstractHbnDao<Product> implements ProductDao
             hql = "FROM Product p WHERE  p.category = :category ORDER BY  p.productName ";         
             query = getSession().createQuery(hql);              
             query.setParameter("category", category);
-            query.setFirstResult(n);
-			query.setMaxResults(m);
+            if (times > 0){
+	            query.setFirstResult(n);
+				query.setMaxResults(m);
+            }
             listProduct =  query.list();
         } catch (Exception e) {
             e.printStackTrace();
@@ -193,8 +199,10 @@ public class ProductDaoImp extends AbstractHbnDao<Product> implements ProductDao
             hql = "FROM Product p WHERE  p.brand = :brand ORDER BY  p.productName ";         
             query = getSession().createQuery(hql);              
             query.setParameter("brand", brand);
-            query.setFirstResult(n);
-			query.setMaxResults(m);
+            if (times > 0){
+	            query.setFirstResult(n);
+				query.setMaxResults(m);
+            }
             listProduct =  query.list();
         } catch (Exception e) {
             e.printStackTrace();
@@ -268,8 +276,11 @@ public class ProductDaoImp extends AbstractHbnDao<Product> implements ProductDao
             if (toPrice > 0){
             	query.setParameter("toPrice", toPrice);
             }
-            query.setFirstResult(n);
-			query.setMaxResults(m);
+            
+            if (times > 0){
+	            query.setFirstResult(n);
+				query.setMaxResults(m);
+            }
             listProduct =  query.list();
         } catch (Exception e) {
             e.printStackTrace();
