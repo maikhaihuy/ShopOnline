@@ -1,11 +1,16 @@
 package com.h2.model.dao.implementation;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Properties;
 
 import org.hibernate.Query;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +44,29 @@ public class OrderDaoImp extends AbstractHbnDao<Order> implements OrderDao{
 	private OrderStatusDao orderStatusDao;
 	@Autowired
 	private RecipientDao recipientDao;
+	
+	private static int TIME_CANCEL_ORDER;
+	
+	// Load property : EXPIRY_AUTHENTIC_EMAIL (days)
+	private void loadProperties(){
+		Properties prop = new Properties();
+		InputStream input = null;
+		try{			
+			// load a properties file
+			ClassLoader classLoader = getClass().getClassLoader();
+			File file = new File(classLoader.getResource("app.properties").getFile());
+			if (file != null) {
+				input = new FileInputStream(file);
+				prop.load(input);
+				// get the property value 
+				this.TIME_CANCEL_ORDER = Integer.parseInt(prop.getProperty("TIME_CANCEL_ORDER"));
+			}
+			
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		}
+	}
+	
 	
 	// Create a new order with :
 	// orderStatus = 1
@@ -98,6 +126,16 @@ public class OrderDaoImp extends AbstractHbnDao<Order> implements OrderDao{
         } 
         if (listOrder.size() == 0)
         	return null;
+        // Check if time of order is greater than 3 hours and order status = 1 then update orderStatus = 2
+        for (int i = 0; i < listOrder.size(); i++){
+        	int orderId = listOrder.get(i).getOrderId();
+        	if (!checkTimeCancelOrder(orderId)){
+        		OrderStatus orderStatus = orderStatusDao.getOrderStatusByOrderId(orderId);
+        		if (orderStatus.getOrderStatusId() == 1){
+        			updateStatusOfOrder(orderId, 2);
+        		}
+        	}
+        }
         return listOrder;
 	}
 	
@@ -119,6 +157,15 @@ public class OrderDaoImp extends AbstractHbnDao<Order> implements OrderDao{
         } 
         if (listOrder.size() == 0)
         	return null;
+        for (int i = 0; i < listOrder.size(); i++){
+        	int orderId = listOrder.get(i).getOrderId();
+        	if (!checkTimeCancelOrder(orderId)){
+        		OrderStatus orderStatus = orderStatusDao.getOrderStatusByOrderId(orderId);
+        		if (orderStatus.getOrderStatusId() == 1){
+        			updateStatusOfOrder(orderId, 2);
+        		}
+        	}
+        }
         return listOrder;
 	}
 
@@ -127,6 +174,12 @@ public class OrderDaoImp extends AbstractHbnDao<Order> implements OrderDao{
 	public void updateStatusOfOrder(int orderId, int orderStatusId) {
 		Query query= null;
         String hql = "";
+        // Check if orderStatusId = 5 and time to cancel order is over then do nothing
+        if (orderStatusId == 5){
+        	if (!checkTimeCancelOrder(orderId)){
+        		return;
+        	}
+        }
         // Get orderStatus
         OrderStatus orderStatus = orderStatusDao.get(orderStatusId, OrderStatus.class);
    
@@ -185,6 +238,30 @@ public class OrderDaoImp extends AbstractHbnDao<Order> implements OrderDao{
         } 
 		
 		return order;
+	}
+	
+	
+	// Check if cancel date > current date return true
+	public boolean checkTimeCancelOrder(int orderId){
+		Order order = get(orderId, Order.class);
+		Date orderDate = order.getOrderDate();
+		loadProperties();
+		
+		Calendar cal = Calendar.getInstance(); // creates calendar
+	    cal.setTime(orderDate); // sets calendar time/date
+	    cal.add(Calendar.HOUR_OF_DAY, this.TIME_CANCEL_ORDER); // adds one hour
+	    Date cancelDate = cal.getTime();
+	    
+	    Calendar cal1 = Calendar.getInstance();
+    	Calendar cal2 = Calendar.getInstance();
+    	cal1.setTime(cancelDate);// cancel date
+    	cal2.getTime();// current date
+    	
+    	if(cal1.after(cal2)){
+    		return true;
+    	}
+    	
+		return false;
 	}
 	
 }

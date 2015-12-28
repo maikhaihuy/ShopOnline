@@ -2,8 +2,6 @@ package com.h2.model.dao.implementation;
 
 import java.util.List;
 
-
-
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -85,4 +83,16 @@ public class OrderDaoImpTest extends TestCase{
         instance.updateStatusOfOrder(3, 6);
         
     }
+	
+	@Test
+	public void testCheckTimeCancelOrder(){
+		System.out.println("testCheckTimeCancelOrder");
+		ApplicationContext appCtx = new ClassPathXmlApplicationContext("beans-service.xml");
+		OrderDao instance = (OrderDao)appCtx.getBean("orderDao");
+		
+        //instance.updateStatusOfOrder(1, 5);
+		instance.getListOrderOfUser("user1");
+       
+	}
+    
 }
