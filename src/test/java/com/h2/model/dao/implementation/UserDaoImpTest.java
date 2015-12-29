@@ -59,7 +59,7 @@ public class UserDaoImpTest extends TestCase{
         ApplicationContext appCtx = new ClassPathXmlApplicationContext("beans-service.xml");
 		UserDao instance = (UserDao)appCtx.getBean("userDao");
 		
-        instance.updateUserPassword("user1", "pass1");
+        instance.updateUserPassword("user1", "pass1","abc");
        
     }
 	

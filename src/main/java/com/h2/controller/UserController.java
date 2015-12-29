@@ -53,11 +53,13 @@ public class UserController {
 		return new ResponseEntity<User>(newUser, HttpStatus.OK);
 	}
 	
-	@RequestMapping(value="/update",
+	@RequestMapping(value="/update/token/{token}",
 					method=RequestMethod.PUT)
 	@ResponseBody
-	public ResponseEntity<User> UpdateUserPassword(@PathVariable("username") String username, @PathVariable("userpassword") String userpassword){
-		User user = userDao.updateUserPassword(username, userpassword);
+	public ResponseEntity<User> UpdateUserPassword(@PathVariable("username") String username,
+													@PathVariable("userpassword") String userpassword,
+													@PathVariable("token") String token){
+		User user = userDao.updateUserPassword(username, userpassword, token);
 		return new ResponseEntity<User>(user, HttpStatus.OK);
 	}
 	
@@ -66,7 +68,7 @@ public class UserController {
 	private void sendConfirmationMail(String username, String email) {
 		String subject = "Verify";
 		String token = userDao.getRegisterToken(username);
-		String content = "http:/localhost:8080/ShopOnline/resgister/" + token;
+		String content = "http:/localhost:8080/ShopOnline/resgister/" + username + "/token/" + token;
 		SendMail send = new SendMail();
 		send.SendTo(username, email, subject, content);
 	}
@@ -74,9 +76,9 @@ public class UserController {
 	private void sendGetPasswordMail (String username, String email) {
 		String subject = "Forgot";
 		String token = userDao.getForgotPasswordToken(username);
-		String content = "http:/localhost:8080/ShopOnline/forgotpassword/" + token;
+		String content = "http:/localhost:8080/ShopOnline/forgotpassword/" + username + "/token/" + token;
 		
 		SendMail send = new SendMail();
-		send.SendTo(username, email, subject, token);
+		send.SendTo(username, email, subject, content);
 	}
 }

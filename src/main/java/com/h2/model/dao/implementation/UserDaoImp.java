@@ -1,5 +1,8 @@
 package com.h2.model.dao.implementation;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
 import org.hibernate.Query;
@@ -70,29 +73,32 @@ public class UserDaoImp extends AbstractHbnDao<User> implements UserDao {
 
 	// Update userPassword with userName
 	// Return user with password = ""
-	public User updateUserPassword(String userName, String userPassword) {
+	public User updateUserPassword(String userName, String userPassword, String tokenStr) {
 		User user = new User();
 		Query query= null;
         String hql = "";
         String hashPassword = hashPassword(userPassword);
         // Check userName exists
-        if (getUserByUserName(userName) != null){
-	        try{                  	
-	            hql = "UPDATE User set userPassword = :userPassword  WHERE userName = :userName";
-	            query = getSession().createQuery(hql);
-	            query.setParameter("userPassword", hashPassword);
-	            query.setParameter("userName", userName);
-	            query.executeUpdate();
-	      
-	        } catch (Exception e) {
-	            e.printStackTrace();
-	            //log.error(e);
-	
-	        } 
-        }
         
-        user = getUserByUserName(userName);
-        user.setUserPassword("");
+        if(getRegisterToken(userName).equals(tokenStr)) {
+        
+	        if (getUserByUserName(userName) != null){
+		        try{                  	
+		            hql = "UPDATE User set userPassword = :userPassword  WHERE userName = :userName";
+		            query = getSession().createQuery(hql);
+		            query.setParameter("userPassword", hashPassword);
+		            query.setParameter("userName", userName);
+		            query.executeUpdate();
+		      
+		        } catch (Exception e) {
+		            e.printStackTrace();
+		            //log.error(e);
+		
+		        } 
+	        }
+	        user = getUserByUserName(userName);
+	        user.setUserPassword("");
+        }
         return user;
 	}
 
@@ -143,7 +149,29 @@ public class UserDaoImp extends AbstractHbnDao<User> implements UserDao {
 	// Hash password
 	public String hashPassword(String password) {
 		String hashpassword = password;
-		//
+		
+		SecureRandom sr;
+		try {
+			// SALT
+			sr = SecureRandom.getInstance("SHA1PRNG");
+			
+			byte[] salt = new byte[16];
+	        sr.nextBytes(salt);
+			
+	        // Hash by SHA-1
+			MessageDigest md = MessageDigest.getInstance("SHA-1");
+            md.update(salt);
+            byte[] bytes = md.digest(password.getBytes());
+            StringBuilder sb = new StringBuilder();
+            for(int i=0; i< bytes.length ;i++)
+            {
+                sb.append(Integer.toString((bytes[i] & 0xff) + 0x100, 16).substring(1));
+            }
+            hashpassword = sb.toString();
+		} catch (NoSuchAlgorithmException e) {
+			// TODO Auto-generated catch block
+				e.printStackTrace();
+		}
 		return hashpassword;
 	}
 
@@ -237,4 +265,6 @@ public class UserDaoImp extends AbstractHbnDao<User> implements UserDao {
 	public String getForgotPasswordToken(String username) {
 		return tokenDao.createForgotPasswordTokenByUserName(username).getTokenString();
 	}
+
+
 }
