@@ -7,6 +7,7 @@ public class SubProduct {
 	private List<Color> listColor;
 	private Category category;
 	private Brand brand;
+	private Product product;
 	
 	public SubProduct(){}
 
@@ -49,6 +50,14 @@ public class SubProduct {
 
 	public void setBrand(Brand brand) {
 		this.brand = brand;
+	}
+
+	public Product getProduct() {
+		return product;
+	}
+
+	public void setProduct(Product product) {
+		this.product = product;
 	}
 	
 	
