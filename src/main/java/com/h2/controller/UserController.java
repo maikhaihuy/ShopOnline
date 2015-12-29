@@ -19,65 +19,67 @@ import com.h2.model.pojo.User;
 public class UserController {
 	@Autowired
 	private UserDao userDao;
-	
-	@RequestMapping(value="/{username}",
-					method=RequestMethod.GET)
+
+	@RequestMapping(value = "/{username}", method = RequestMethod.GET)
 	@ResponseBody
-	public ResponseEntity<User> GetUser(@PathVariable("username") String username){
+	public ResponseEntity<User> GetUser(@PathVariable("username") String username) {
 		User user = userDao.getUserByUserName(username);
 		return new ResponseEntity<User>(user, HttpStatus.OK);
 	}
-	
-	@RequestMapping(value="/new",
-					method=RequestMethod.POST,
-					consumes = { "application/json"})
+
+	@RequestMapping(value = "/new", method = RequestMethod.POST, consumes = { "application/json" })
 	@ResponseBody
-	public ResponseEntity<User> AddUser(@RequestBody User user){
+	public ResponseEntity<User> AddUser(@RequestBody User user) {
 		User newUser = userDao.createNewUser(user.getUserName(), user.getUserEmail(), user.getUserPassword(), 3);
-		if ( newUser != null) {
+		if (newUser != null) {
 			sendConfirmationMail(newUser.getUserName(), newUser.getUserEmail());
 			return new ResponseEntity<User>(newUser, HttpStatus.OK);
-		}
-		else
+		} else
 			return new ResponseEntity<User>(HttpStatus.CONFLICT);
 	}
-	
-	@RequestMapping(value="/login",
-			method=RequestMethod.POST,
-			consumes = { "application/json"})
+
+	@RequestMapping(value = "/login", method = RequestMethod.POST, consumes = { "application/json" })
 	@ResponseBody
-	public ResponseEntity<User> LoginUser(@RequestBody User user){
+	public ResponseEntity<User> LoginUser(@RequestBody User user) {
 		User newUser = userDao.login(user.getUserName(), user.getUserPassword());
 		if (newUser == null)
 			return new ResponseEntity<User>(newUser, HttpStatus.GONE);
 		return new ResponseEntity<User>(newUser, HttpStatus.OK);
 	}
-	
-	@RequestMapping(value="/update/token/{token}",
-					method=RequestMethod.PUT)
+
+	@RequestMapping(value = "/update/token/{token}", method = RequestMethod.PUT)
 	@ResponseBody
 	public ResponseEntity<User> UpdateUserPassword(@PathVariable("username") String username,
-													@PathVariable("userpassword") String userpassword,
-													@PathVariable("token") String token){
+			@PathVariable("userpassword") String userpassword, @PathVariable("token") String token) {
 		User user = userDao.updateUserPassword(username, userpassword, token);
 		return new ResponseEntity<User>(user, HttpStatus.OK);
 	}
-	
+
+	@RequestMapping(value = "/forgotpassword/{username}", method = RequestMethod.GET)
+	@ResponseBody
+	public ResponseEntity<User> ForgotPassword(@PathVariable("username") String username) {
+		User user = userDao.createToken(username);
+		if (user == null)
+			return new ResponseEntity<User>(HttpStatus.NOT_FOUND);
+		sendGetPasswordMail(username, user.getUserEmail());
+		return new ResponseEntity<User>(user,HttpStatus.OK);
+	}
+
 	// Support function
 
 	private void sendConfirmationMail(String username, String email) {
 		String subject = "Verify";
 		String token = userDao.getRegisterToken(username);
-		String content = "http:/localhost:8080/ShopOnline/resgister/" + username + "/token/" + token;
+		String content = "http:/localhost:8080/ShopOnline/token/"+ token +"/resgister/" + username;
 		SendMail send = new SendMail();
 		send.SendTo(username, email, subject, content);
 	}
-	
-	private void sendGetPasswordMail (String username, String email) {
+
+	private void sendGetPasswordMail(String username, String email) {
 		String subject = "Forgot";
 		String token = userDao.getForgotPasswordToken(username);
-		String content = "http:/localhost:8080/ShopOnline/forgotpassword/" + username + "/token/" + token;
-		
+		String content = "http:/localhost:8080/ShopOnline/token/" + token + "/forgotpassword/" + username;
+
 		SendMail send = new SendMail();
 		send.SendTo(username, email, subject, content);
 	}

@@ -26,6 +26,8 @@ public class OrderController {
 	@ResponseBody
 	public ResponseEntity<List<Order>> GetOrders(@PathVariable("username") String username){
 		List<Order> listOrder = orderDao.getListOrderOfUser(username);
+		if (listOrder == null)
+			return new ResponseEntity<List<Order>>(listOrder, HttpStatus.NOT_FOUND);
 		return new ResponseEntity<List<Order>>(listOrder, HttpStatus.OK);
 	}
 	
@@ -34,6 +36,8 @@ public class OrderController {
 	@ResponseBody
 	public ResponseEntity<Order> GetOrder(@PathVariable("idOrder") int idOrder){
 		Order order = orderDao.getOrderById(idOrder);
+		if (order == null)
+			return new ResponseEntity<Order>(order, HttpStatus.NOT_FOUND);
 		return new ResponseEntity<Order>(order, HttpStatus.OK);
 	}
 	

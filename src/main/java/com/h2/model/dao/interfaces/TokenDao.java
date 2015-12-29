@@ -9,4 +9,5 @@ public interface TokenDao extends Dao<Token>{
 	public Token createForgotPasswordTokenByUserName(String userName);
 	public Token verifyToken(String tokenString);	
 	public void updateVerifiedToken(int tokenId);
+	public void updateVerifiedUser(String userName);
 }

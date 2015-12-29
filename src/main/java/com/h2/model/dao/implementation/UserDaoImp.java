@@ -78,10 +78,8 @@ public class UserDaoImp extends AbstractHbnDao<User> implements UserDao {
 		Query query= null;
         String hql = "";
         String hashPassword = hashPassword(userPassword);
-        // Check userName exists
-        
-        if(getRegisterToken(userName).equals(tokenStr)) {
-        
+        // Check userName existst
+        if(tokenDao.getForgotTokenStringByUserName(userName).equals(tokenStr)) {
 	        if (getUserByUserName(userName) != null){
 		        try{                  	
 		            hql = "UPDATE User set userPassword = :userPassword  WHERE userName = :userName";
@@ -110,15 +108,25 @@ public class UserDaoImp extends AbstractHbnDao<User> implements UserDao {
         user.setUserEmail(userEmail);
         user.setUserPhoneNumber("");
         user.setUserAddress("");
-        user.setUserPassword(userPassword);
+        user.setUserPassword(hashPassword(userPassword));
         user.setIsDeleted(0);
         user.setDistrict(districtDao.get(1, District.class));
         user.setIsVerified(0);
         user.setRole(rolesDao.get(roleId, Roles.class));
         save(user);
+        
+        // Create token
+        // Can kiem tra add thanh cong
+        tokenDao.createRegisterTokenByUserName(userName);
+        
 		return user;
 	}
 
+	// Forgot password: call create token
+	public User createToken(String userName) {
+		tokenDao.createForgotPasswordTokenByUserName(userName);
+		return getUserByUserName(userName);
+	}
 
 	// Return user, set password = ""
 	public User login(String userName, String userPassword) {
@@ -259,12 +267,10 @@ public class UserDaoImp extends AbstractHbnDao<User> implements UserDao {
 	}
 
 	public String getRegisterToken(String username) {
-		return tokenDao.createRegisterTokenByUserName(username).getTokenString();
+		return tokenDao.getRegisterTokenStringByUserName(username).getTokenString();
 	}
 	
 	public String getForgotPasswordToken(String username) {
-		return tokenDao.createForgotPasswordTokenByUserName(username).getTokenString();
+		return tokenDao.getForgotTokenStringByUserName(username).getTokenString();
 	}
-
-
 }

@@ -18,26 +18,33 @@ public class TokenController {
 	@Autowired
 	private TokenDao tokenDao;
 	
-	@RequestMapping(value="/registration/{username}/token/{strtoken}",
+	@RequestMapping(value="/{strtoken}/registration/{username}",
 					method=RequestMethod.GET)
 	@ResponseBody
 	public ResponseEntity<Token> GetRegisterToken(@PathVariable("username") String username,
 													@PathVariable("strtoken") String strtoken){
 		Token token = tokenDao.getRegisterTokenStringByUserName(username);
-		if (token != null && token.getTokenString().equals(strtoken))
+		Token confirmToken = tokenDao.verifyToken(strtoken);
+		if (token != null && confirmToken != null && token.getTokenString().equals(strtoken)){
+			tokenDao.updateVerifiedToken(token.getTokenId());
+			tokenDao.updateVerifiedUser(username);
 			return new ResponseEntity<Token>(token, HttpStatus.OK);
+		}
 		else
 			return new ResponseEntity<Token>(token, HttpStatus.GONE);
 	}
 	
-	@RequestMapping(value="/forgotpassword/{username}/token/{strtoken}",
+	@RequestMapping(value="/{strtoken}/forgotpassword/{username}",
 			method=RequestMethod.GET)
 	@ResponseBody
 	public ResponseEntity<Token> GetForgotPasswordToken(@PathVariable("username") String username,
 														@PathVariable("strtoken") String strtoken){
 		Token token = tokenDao.getForgotTokenStringByUserName(username);
-		if (token != null && token.getTokenString().equals(strtoken))
+		Token confirmToken = tokenDao.verifyToken(strtoken);
+		if (token != null && confirmToken != null && token.getTokenString().equals(strtoken)){
+			tokenDao.updateVerifiedToken(token.getTokenId());
 			return new ResponseEntity<Token>(token, HttpStatus.OK);
+		}
 		else
 			return new ResponseEntity<Token>(token, HttpStatus.GONE);
 	}

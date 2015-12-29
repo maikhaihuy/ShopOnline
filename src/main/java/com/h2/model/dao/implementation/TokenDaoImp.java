@@ -198,6 +198,7 @@ public class TokenDaoImp extends AbstractHbnDao<Token> implements TokenDao {
 		if (listToken.size() == 1){
 			return listToken.get(0);
 		}
+		
 		return token;
 	}
 
@@ -207,7 +208,7 @@ public class TokenDaoImp extends AbstractHbnDao<Token> implements TokenDao {
 		String hql = "";
 		Date date = new Date();
 		List<Token> listToken = new ArrayList<Token>();
-
+		
 		try{                	
 			hql = "UPDATE Token set isVerified = :isVerified  WHERE tokenId = :tokenId";
             query = getSession().createQuery(hql);
@@ -218,6 +219,10 @@ public class TokenDaoImp extends AbstractHbnDao<Token> implements TokenDao {
             e.printStackTrace();
             //log.error(e);          
         } 
+	}
+	
+	public void updateVerifiedUser(String userName){
+		userDao.updateVerifiedUser(userName);
 	}
 	
 }
