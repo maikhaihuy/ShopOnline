@@ -8,6 +8,7 @@ public class SubProduct {
 	private Category category;
 	private Brand brand;
 	private Product product;
+	private List<String> listImages;
 	
 	public SubProduct(){}
 
@@ -58,6 +59,14 @@ public class SubProduct {
 
 	public void setProduct(Product product) {
 		this.product = product;
+	}
+
+	public List<String> getListImages() {
+		return listImages;
+	}
+
+	public void setListImages(List<String> listImages) {
+		this.listImages = listImages;
 	}
 	
 	

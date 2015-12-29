@@ -69,7 +69,13 @@ public class ProductController {
 		SubProduct subProduct = null;
 		Product product = productDao.getProductById(idProduct);
 		
+		List<String> listImages = new ArrayList<String>();
+		for (String str : product.getProductLargeImage().split(";"))
+			listImages.add(str);
+		
 		subProduct= productDao.getInfoOfProductByProductId(product.getProductId());
+		subProduct.setProduct(product);
+		subProduct.setListImages(listImages);
 		
 		return new ResponseEntity<SubProduct>(subProduct, HttpStatus.OK);
 	}
