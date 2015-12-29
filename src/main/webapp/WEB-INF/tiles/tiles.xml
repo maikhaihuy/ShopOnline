@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 2.0//EN" 
+"http://tiles.apache.org/dtds/tiles-config_2_0.dtd">
+
+
+<tiles-definitions>
+	<definition name="Page" template="/WEB-INF/view/template/Template.jsp">
+		<put-attribute name="header" value="/WEB-INF/view/page/Header.jsp"/>
+		<put-attribute name="content" value="" />
+		<put-attribute name="footer" value="/WEB-INF/view/page/Footer.jsp"/>
+	</definition>
+	<definition name="IndexUser" extends="Page">
+		<put-attribute name="content" value="/WEB-INF/view/page/IndexUser.jsp"/>
+	</definition>
+	<definition name="AddUser" extends="Page">
+		<put-attribute name="content" value="/WEB-INF/view/page/AddUser.jsp"/>
+	</definition>
+	<definition name="IndexOrder" extends="Page">
+		<put-attribute name="content" value="/WEB-INF/view/page/IndexOrder.jsp"/>
+	</definition>
+	<definition name="DetailOrder" extends="Page">
+		<put-attribute name="content" value="/WEB-INF/view/page/DetailOrder.jsp"/>
+	</definition>
+	<definition name="IndexDiscount" extends="Page">
+		<put-attribute name="content" value="/WEB-INF/view/page/IndexDiscount.jsp"/>
+	</definition>
+	<definition name="AddDiscount" extends="Page">
+		<put-attribute name="content" value="/WEB-INF/view/page/AddDiscount.jsp"/>
+	</definition>
+</tiles-definitions>
