@@ -18,19 +18,23 @@ public class TokenController {
 	@Autowired
 	private TokenDao tokenDao;
 	
-	@RequestMapping(value="/registration/{username}",
+	@RequestMapping(value="/registration/{token}",
 					method=RequestMethod.GET)
 	@ResponseBody
 	public ResponseEntity<Token> GetRegisterToken(@PathVariable("username") String username){
 		Token token = tokenDao.getRegisterTokenStringByUserName(username);
+		if (token == null)
+			return new ResponseEntity<Token>(token, HttpStatus.GONE);
 		return new ResponseEntity<Token>(token, HttpStatus.OK);
 	}
 	
-	@RequestMapping(value="/forgotpassword/{username}",
+	@RequestMapping(value="/forgotpassword/{token}",
 			method=RequestMethod.GET)
 	@ResponseBody
 	public ResponseEntity<Token> GetForgotPasswordToken(@PathVariable("username") String username){
 		Token token = tokenDao.getForgotTokenStringByUserName(username);
+		if (token == null)
+			return new ResponseEntity<Token>(token, HttpStatus.GONE);
 		return new ResponseEntity<Token>(token, HttpStatus.OK);
 	}
 }

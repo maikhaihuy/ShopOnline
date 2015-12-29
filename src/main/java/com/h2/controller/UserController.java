@@ -4,11 +4,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.h2.common.SendMail;
 import com.h2.model.dao.interfaces.UserDao;
 import com.h2.model.pojo.User;
 
@@ -27,12 +29,28 @@ public class UserController {
 	}
 	
 	@RequestMapping(value="/new",
-					method=RequestMethod.POST)
+					method=RequestMethod.POST,
+					consumes = { "application/json"})
 	@ResponseBody
-	public ResponseEntity<User> AddUser(@PathVariable("username") String username,
-			@PathVariable("useremail") String useremail, @PathVariable("userpassword") String userpassword){
-		User user = userDao.createNewUser(username, useremail, userpassword, 3);
-		return new ResponseEntity<User>(user, HttpStatus.OK);
+	public ResponseEntity<User> AddUser(@RequestBody User user){
+		User newUser = userDao.createNewUser(user.getUserName(), user.getUserEmail(), user.getUserPassword(), 3);
+		if ( newUser != null) {
+			sendConfirmationMail(newUser.getUserName(), newUser.getUserEmail());
+			return new ResponseEntity<User>(newUser, HttpStatus.OK);
+		}
+		else
+			return new ResponseEntity<User>(HttpStatus.CONFLICT);
+	}
+	
+	@RequestMapping(value="/login",
+			method=RequestMethod.POST,
+			consumes = { "application/json"})
+	@ResponseBody
+	public ResponseEntity<User> LoginUser(@RequestBody User user){
+		User newUser = userDao.login(user.getUserName(), user.getUserPassword());
+		if (newUser == null)
+			return new ResponseEntity<User>(newUser, HttpStatus.GONE);
+		return new ResponseEntity<User>(newUser, HttpStatus.OK);
 	}
 	
 	@RequestMapping(value="/update",
@@ -41,5 +59,24 @@ public class UserController {
 	public ResponseEntity<User> UpdateUserPassword(@PathVariable("username") String username, @PathVariable("userpassword") String userpassword){
 		User user = userDao.updateUserPassword(username, userpassword);
 		return new ResponseEntity<User>(user, HttpStatus.OK);
+	}
+	
+	// Support function
+
+	private void sendConfirmationMail(String username, String email) {
+		String subject = "Verify";
+		String token = userDao.getRegisterToken(username);
+		String content = "http:/localhost:8080/ShopOnline/resgister/" + token;
+		SendMail send = new SendMail();
+		send.SendTo(username, email, subject, content);
+	}
+	
+	private void sendGetPasswordMail (String username, String email) {
+		String subject = "Forgot";
+		String token = userDao.getForgotPasswordToken(username);
+		String content = "http:/localhost:8080/ShopOnline/forgotpassword/" + token;
+		
+		SendMail send = new SendMail();
+		send.SendTo(username, email, subject, token);
 	}
 }

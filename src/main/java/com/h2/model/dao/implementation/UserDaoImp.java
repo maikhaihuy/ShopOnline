@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.h2.model.dao.interfaces.AbstractHbnDao;
 import com.h2.model.dao.interfaces.DistrictDao;
 import com.h2.model.dao.interfaces.RolesDao;
+import com.h2.model.dao.interfaces.TokenDao;
 import com.h2.model.dao.interfaces.UserDao;
 import com.h2.model.pojo.District;
 import com.h2.model.pojo.Roles;
@@ -22,6 +23,8 @@ public class UserDaoImp extends AbstractHbnDao<User> implements UserDao {
 	private RolesDao rolesDao;
 	@Autowired
 	private DistrictDao districtDao;
+	@Autowired
+	private TokenDao tokenDao;
 	
 	// Get User by userName
 	public User getUserByUserName(String userName) {		
@@ -130,7 +133,7 @@ public class UserDaoImp extends AbstractHbnDao<User> implements UserDao {
         } 
         
         if (listUser.size() == 1){
-        	listUser.get(0).setUserPassword("");
+        	//listUser.get(0).setUserPassword("");
         	return listUser.get(0);
         }
 		return null;
@@ -139,9 +142,9 @@ public class UserDaoImp extends AbstractHbnDao<User> implements UserDao {
 	
 	// Hash password
 	public String hashPassword(String password) {
-		String hasspassword = password;
+		String hashpassword = password;
 		//
-		return hasspassword;
+		return hashpassword;
 	}
 
 	// Check userName exists when register
@@ -227,8 +230,11 @@ public class UserDaoImp extends AbstractHbnDao<User> implements UserDao {
 		return user;
 	}
 
+	public String getRegisterToken(String username) {
+		return tokenDao.createRegisterTokenByUserName(username).getTokenString();
+	}
 	
-	
-
-	
+	public String getForgotPasswordToken(String username) {
+		return tokenDao.createForgotPasswordTokenByUserName(username).getTokenString();
+	}
 }
