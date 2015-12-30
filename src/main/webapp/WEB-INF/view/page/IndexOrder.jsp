@@ -48,12 +48,14 @@
                         </thead>
 
                         <tbody>
-							<tr>
-								<td>1</td>
-								<td><a href="order/1">233</a></td>
-								<td>12/4/2012</td>
-								<td><a href="index.html">Nguyễn Văn A</a></td> 
-								<td>100000</td>	
+							
+								<c:forEach var="orderItem" items="${listOrder}" varStatus="status">
+								<tr>
+								<td>${status.index}</td>
+								<td><a href="detailOrder.do?id=${orderItem.orderId }">${orderItem.orderCode }</a></td>
+								<td>${orderItem.orderDate }</td>
+								<td></td> 
+								<td>${orderItem.orderTotal }</td>	
 								<td>
 									<form action="order" method="get">
 										<select class="dropdown" name='status' onchange='submit()' data-settings='{"wrapperClass":"metro1"}'>
@@ -68,7 +70,8 @@
 										<input type='hidden' name='idOrder' value='@p.ID' />
 									</form>
 								</td>
-                            </tr>                           
+                            </tr> 
+                            </c:forEach>                          
                         </tbody>
 
                     </table>

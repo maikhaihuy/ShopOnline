@@ -9,13 +9,13 @@
     <meta name="author" content="">
     
     <!-- Bootstrap -->
-    <link rel="stylesheet" type="text/css" href="lib/bootstrap/css/bootstrap.css">   
-    <link rel="stylesheet" type="text/css" href="stylesheets/theme.css">
-    <link rel="stylesheet" href="lib/font-awesome/css/font-awesome.css">
+    <link rel="stylesheet" type="text/css" href="<c:url value="/resources/lib/bootstrap/css/bootstrap.css"/>" >
+    <link rel="stylesheet" type="text/css" href="<c:url value="/resources/stylesheets/theme.css" /> ">
+    <link rel="stylesheet" href="<c:url value="/resources/lib/font-awesome/css/font-awesome.css"/> ">
 	
-    <script src="lib/bootstrap/js/jquery-1.10.2.js"></script>
-    <script src="lib/bootstrap/js/jquery-ui.js"></script>
-    <link rel="stylesheet" href="lib/bootstrap/js/jquery-ui.css">
+    <script src="<c:url value="/resources/lib/bootstrap/js/jquery-1.10.2.js"/> "></script>
+    <script src="<c:url value="/resources/lib/bootstrap/js/jquery-ui.js"/> "> </script>
+    <link rel="stylesheet" href="<c:url value="/resources/resources/lib/bootstrap/js/jquery-ui.css"/> ">
 	
 	<!-- Datepicked -->
 	<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
@@ -56,16 +56,16 @@
             <ul class="nav pull-right">
 				<!-- Login/ log out-->
                 <li id="fat-menu" class="dropdown">
-                    <a link="account" role="button" onclick="ShowHideLogOut(this)">
+                    <a href="account" role="button" onclick="ShowHideLogOut(this)">
                         <i class="icon-user"></i> @User.Identity.GetUserName()
                         <i class="icon-caret-down"></i>
                     </a>
                     <ul id="account" class="dropdown-menu">
-                        @*<li><a tabindex="-1" href="#">My Account</a></li>
+                        <li><a tabindex="-1" href="#">My Account</a></li>
                         <li class="divider"></li>
                         <li><a tabindex="-1" class="visible-phone" href="#">Settings</a></li>
                         <li class="divider visible-phone"></li>*@
-                        <li>@Html.ActionLink("Đăng Thoát", "LogOut", "Account")</li>
+                        <li><a href="discount/all">Đăng xuất</li>
                     </ul>
                 </li>
 				<!-- End Login/ log out-->
@@ -80,15 +80,15 @@
         <a link="account-menu" class="nav-header " onclick="ShowHide(this)"><i class="icon-user"></i>Thành Viên<span class="label label-info"></span></a>
 		<!-- User -->
         <ul id="account-menu" class="nav nav-list collapse">            
-            <li><a href="user/all"> Danh sách admin</a></li>
-            <li><a href="user/add"> Thêm admin</a></li>
+            <li><a href="userList.do"> Danh sách admin</a></li>
+            <li><a href="userAdd.do"> Thêm admin</a></li>
         </ul>
 		
 		<!-- Discount -->
         <a link="category-menu" class="nav-header " onclick="ShowHide(this)"><i class="icon-gift"></i>Khuyến mãi<i class="icon-chevron-up"></i></a>
         <ul id="category-menu" class="nav nav-list collapse">
-            <li><a href="discount/all"> Danh sách khuyến mãi</a></li>
-            <li><a href="discount/add"> Thêm khuyến mãi</a></li>
+            <li><a href="discountList.do"> Danh sách khuyến mãi</a></li>
+            <li><a href="discountAdd.do"> Thêm khuyến mãi</a></li>
         </ul>
 		<!--
         <a link="product-menu" class="nav-header " onclick="ShowHide(this)"><i class="icon-gift"></i>Sản phẩm<i class="icon-chevron-up"></i></a>
@@ -102,19 +102,19 @@
 		<!-- Order -->
         <a link="order-menu" class="nav-header " onclick="ShowHide(this)"><i class="icon-list-alt"></i>Đơn hàng<i class="icon-chevron-up"></i></a>
         <ul id="order-menu" class="nav nav-list collapse">
-            <li><a href="order/all"> Danh sách đơn hàng </a></li>          
+            <li><a href="orderList.do"> Danh sách đơn hàng </a></li>          
             <li>
-                <a href="order/orderstatus/1">
+                <a href="orderList.do/1">
                     Đơn hàng chưa xác nhận
                 </a>
             </li>
             <li>
-                <a href="order/orderstatus/2">
+                <a href="orderList.do/2">
                     Đơn hàng đã xác nhận
                 </a>
             </li>
             <li>
-                <a href="order/orderstatus/4">
+                <a href="orderList.do/4">
                     Đơn hàng đã giao
                 </a>
             </li>
