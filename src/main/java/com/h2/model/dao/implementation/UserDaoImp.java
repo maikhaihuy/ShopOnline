@@ -1,5 +1,6 @@
 package com.h2.model.dao.implementation;
 
+import java.nio.charset.Charset;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
@@ -157,14 +158,9 @@ public class UserDaoImp extends AbstractHbnDao<User> implements UserDao {
 	// Hash password
 	public String hashPassword(String password) {
 		String hashpassword = password;
-		
-		SecureRandom sr;
+
 		try {
-			// SALT
-			sr = SecureRandom.getInstance("SHA1PRNG");
-			
-			byte[] salt = new byte[16];
-	        sr.nextBytes(salt);
+			byte[] salt = password.getBytes(Charset.forName("UTF-8"));
 			
 	        // Hash by SHA-1
 			MessageDigest md = MessageDigest.getInstance("SHA-1");

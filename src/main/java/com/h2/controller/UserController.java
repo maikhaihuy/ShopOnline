@@ -70,7 +70,7 @@ public class UserController {
 	private void sendConfirmationMail(String username, String email) {
 		String subject = "Verify";
 		String token = userDao.getRegisterToken(username);
-		String content = "http:/localhost:8080/ShopOnline/token/"+ token +"/resgister/" + username;
+		String content = "http://localhost:8000/#/ShopOnline/token/"+ token +"/registration/" + username;
 		SendMail send = new SendMail();
 		send.SendTo(username, email, subject, content);
 	}
@@ -78,7 +78,7 @@ public class UserController {
 	private void sendGetPasswordMail(String username, String email) {
 		String subject = "Forgot";
 		String token = userDao.getForgotPasswordToken(username);
-		String content = "http:/localhost:8080/ShopOnline/token/" + token + "/forgotpassword/" + username;
+		String content = "http://localhost:8000/#/ShopOnline/token/" + token + "/forgotpassword/" + username;
 
 		SendMail send = new SendMail();
 		send.SendTo(username, email, subject, content);
