@@ -64,8 +64,8 @@
                         <li><a tabindex="-1" href="#">My Account</a></li>
                         <li class="divider"></li>
                         <li><a tabindex="-1" class="visible-phone" href="#">Settings</a></li>
-                        <li class="divider visible-phone"></li>*@
-                        <li><a href="discount/all">Đăng xuất</li>
+                        <li class="divider visible-phone"></li>
+                        <li><a href="<c:url value="/admin/user/logout.do" /> ">Đăng xuất</a></li>
                     </ul>
                 </li>
 				<!-- End Login/ log out-->
@@ -80,15 +80,15 @@
         <a link="account-menu" class="nav-header " onclick="ShowHide(this)"><i class="icon-user"></i>Thành Viên<span class="label label-info"></span></a>
 		<!-- User -->
         <ul id="account-menu" class="nav nav-list collapse">            
-            <li><a href="userList.do"> Danh sách admin</a></li>
-            <li><a href="userAdd.do"> Thêm admin</a></li>
+            <li><a href="<c:url value="/admin/user/list.do?page=1&numPerPage=10" />"> Danh sách admin</a></li>
+            <li><a href="<c:url value="/admin/user/add.do" />"> Thêm admin</a></li>
         </ul>
 		
 		<!-- Discount -->
         <a link="category-menu" class="nav-header " onclick="ShowHide(this)"><i class="icon-gift"></i>Khuyến mãi<i class="icon-chevron-up"></i></a>
         <ul id="category-menu" class="nav nav-list collapse">
-            <li><a href="discountList.do"> Danh sách khuyến mãi</a></li>
-            <li><a href="discountAdd.do"> Thêm khuyến mãi</a></li>
+            <li><a href="<c:url value="/admin/discount/list.do?page=1&numPerPage=10" />"> Danh sách khuyến mãi</a></li>
+            <li><a href="<c:url value="/admin/discount/add.do" />"> Thêm khuyến mãi</a></li>
         </ul>
 		<!--
         <a link="product-menu" class="nav-header " onclick="ShowHide(this)"><i class="icon-gift"></i>Sản phẩm<i class="icon-chevron-up"></i></a>
@@ -102,19 +102,19 @@
 		<!-- Order -->
         <a link="order-menu" class="nav-header " onclick="ShowHide(this)"><i class="icon-list-alt"></i>Đơn hàng<i class="icon-chevron-up"></i></a>
         <ul id="order-menu" class="nav nav-list collapse">
-            <li><a href="orderList.do"> Danh sách đơn hàng </a></li>          
+            <li><a href="<c:url value="/admin/order/list.do?id=0&page=1&numPerPage=10" />"> Danh sách đơn hàng </a></li>          
             <li>
-                <a href="orderList.do/1">
+                <a href="<c:url value="/admin/order/list.do?id=1&page=1&numPerPage=10" />">
                     Đơn hàng chưa xác nhận
                 </a>
             </li>
             <li>
-                <a href="orderList.do/2">
+                 <a href="<c:url value="/admin/order/list.do?id=2&page=1&numPerPage=10" />">
                     Đơn hàng đã xác nhận
                 </a>
             </li>
             <li>
-                <a href="orderList.do/4">
+                 <a href="<c:url value="/admin/order/list.do?id=4&page=1&numPerPage=10" />">
                     Đơn hàng đã giao
                 </a>
             </li>

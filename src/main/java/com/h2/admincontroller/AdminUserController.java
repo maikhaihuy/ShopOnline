@@ -8,12 +8,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @RequestMapping(value={"/user"})
 public class AdminUserController {
 	
-	@RequestMapping(value={"/userList.do"}, method = RequestMethod.GET)
+	@RequestMapping(value={"/list.do"}, method = RequestMethod.GET)
 	public String doPage1(){
 		return "IndexUser";
 	}
 	
-	@RequestMapping(value={"/userAdd.do"}, method = RequestMethod.GET)
+	@RequestMapping(value={"/add.do"}, method = RequestMethod.GET)
 	public String doPage2(){
 		return "AddUser";
 	}

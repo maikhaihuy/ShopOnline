@@ -264,5 +264,83 @@ public class OrderDaoImp extends AbstractHbnDao<Order> implements OrderDao{
     	
 		return false;
 	}
+
+
+	// Get list order by status id
+	// If id = 0 get all
+	public List<Order> getListOrderByStatusId(int statusId) {
+		Query query = null;
+        List<Order> listOrder = new ArrayList<Order>();
+        String hql = "";
+        OrderStatus orderStatus = new OrderStatus();
+        if (statusId != 0){
+        	//Get user by user name
+        	orderStatus = orderStatusDao.get(statusId, OrderStatus.class);
+        }
+        
+        try{                	
+            hql = "FROM Order d WHERE ";
+            if (statusId != 0){
+            	hql += " d.orderStatus = :orderStatus AND ";
+            	
+            }
+            hql += " d.isDeleted = :isDeleted ORDER BY d.orderDate DESC";
+            query = getSession().createQuery(hql);
+            if (statusId != 0){
+            	query.setParameter("orderStatus", orderStatus);
+            }
+            
+            query.setParameter("isDeleted", 0);
+            listOrder =  query.list();
+        } catch (Exception e) {
+            e.printStackTrace();
+            //log.error(e);          
+        } 
+        if (listOrder.size() == 0)
+        	return null;
+        
+        return listOrder;
+	}
+
+
+	public List<Order> getListOrderByStatusIdPaging(int statusId, int page,
+			int numPerPage) {
+		Query query = null;
+        List<Order> listOrder = new ArrayList<Order>();
+        String hql = "";
+        int n = (page - 1)*numPerPage;
+        int m = page*numPerPage;
+        
+        OrderStatus orderStatus = new OrderStatus();
+        if (statusId != 0){
+        	//Get user by user name
+        	orderStatus = orderStatusDao.get(statusId, OrderStatus.class);
+        }
+        
+        try{                	
+            hql = "FROM Order d WHERE ";
+            if (statusId != 0){
+            	hql += " d.orderStatus = :orderStatus AND ";
+            	
+            }
+            hql += " d.isDeleted = :isDeleted ORDER BY d.orderDate DESC";
+            query = getSession().createQuery(hql);
+            if (statusId != 0){
+            	query.setParameter("orderStatus", orderStatus);
+            }
+            
+            query.setParameter("isDeleted", 0);
+            query.setFirstResult(n);
+			query.setMaxResults(m);
+            listOrder =  query.list();
+        } catch (Exception e) {
+            e.printStackTrace();
+            //log.error(e);          
+        } 
+        if (listOrder.size() == 0)
+        	return null;
+        
+        return listOrder;
+	}
 	
 }

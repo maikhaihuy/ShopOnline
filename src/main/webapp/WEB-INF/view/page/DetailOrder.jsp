@@ -1,5 +1,6 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>		
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>	
 
 <!-- Start body-->
 		<div class="content">
@@ -9,8 +10,8 @@
 			</div>
        
             <ul class="breadcrumb">
-				<li><a href="user/all">Trang chủ</a> <span class="divider">/</span></li>
-				<li><a href="order/all">Danh sách đơn hàng</a> <span class="divider">/</span></li>
+				<li><a href="<c:url value="/admin/user/list.do?page=1&numPerPage=10"/> ">Trang chủ</a> <span class="divider">/</span></li>
+				<li><a href="<c:url value="/admin/order/list.do?id=0&page=1&numPerPage=10"/> ">Danh sách đơn hàng</a> <span class="divider">/</span></li>
 				<li class="active">Đơn hàng</li>
 			</ul>
 
@@ -18,9 +19,9 @@
 				<div class="row-fluid">
 						
 				<div class="btn-toolbar">
-				   <label> <strong>Mã đơn hàng:</strong>  1234</label>
-				<label><strong>Ngày đặt:</strong> 12/3/2014</label>
-				<label><strong>Tình trạng:</strong> Chưa xác nhận</label>
+				   <label> <strong>Mã đơn hàng:</strong> ${adOrder.order.orderCode }</label>
+				<label><strong>Ngày đặt:</strong> <fmt:formatDate value="${adOrder.order.orderDate }"  pattern="dd/MM/yyyy  hh:MM:ss"/></label>
+				<label><strong>Tình trạng:</strong> ${adOrder.orderStatusName }</label>
 				<div class="btn-group"></div>
 			</div>
 
@@ -32,28 +33,36 @@
 						<th class="text-center"><strong>Màu Sắc</strong></th>
 						<th class="text-center"><strong>Size</strong></th>
 						<th class="text-center"><strong>Số Lượng</strong></th>
-						<th class="text-center"><strong>Đơn giá</strong></th>
-						<th class="text-center"><strong>Thành tiền</strong></th>
+						<th class="text-center"><strong>Đơn giá (VNĐ/1 sản phẩm)</strong></th>
+						<th class="text-center"><strong>Thuế (VNĐ)</strong></th>
+						<th class="text-center"><strong>Thành tiền(VNĐ)</strong></th>
 					</tr>
 					<tbody>
+						<c:set var="total" value="0"/>
+						<c:forEach var="detailOrderItem" items="${listAdDetailOrder}" varStatus="status">
 						<tr>
-							<td class="text-center">1</td>
-							<td class="text-center">1213</td>
-							<td class="text-center">Đỏ</td>
-							<td class="text-center">S</td>
-							<td class="text-center">2</td>
-							<td class="text-center">100000</td>
-							<td class="text-center">200000</td>
+							<td>${status.index}</td>
+							<td class="text-center">${detailOrderItem.productName }</td>
+							<td class="text-center">${detailOrderItem.colorName }</td>
+							<td class="text-center">${detailOrderItem.sizeName }</td>
+							<td class="text-center">${detailOrderItem.detailOrderQuantity }</td>
+							<td class="text-center"><fmt:formatNumber type="number" value="${detailOrderItem.detailOrderPrice }" groupingUsed="true"/></td>
+							<td class="text-center"><fmt:formatNumber type="number" value="${detailOrderItem.tax }" groupingUsed="true"/></td>
+							<td class="text-center"><fmt:formatNumber type="number" value="${detailOrderItem.sum }" groupingUsed="true"/></td>
+							<c:set var="total" value="${total+detailOrderItem.sum }"/>
 						</tr>
+						</c:forEach>   
 						<tr>
 							<td></td>
 							<td></td>
 							<td></td>
 							<td></td>
 							<td></td>
-							<td class="text-center"><span style="font-weight:bold">Tổng tiền</span></td>
-							<td class="text-center"><span style="font-weight:bold">1000000</span></td>
-						</tr>												
+							<td></td>
+							<td class="text-center"><span style="font-weight:bold">Tổng tiền (VNĐ)</span></td>
+							<td class="text-center"><span style="font-weight:bold"><fmt:formatNumber type="number" value="${total}" groupingUsed="true"/></span></td>
+						</tr>	
+																	
 					</tbody>
 				</table>
 			</div>

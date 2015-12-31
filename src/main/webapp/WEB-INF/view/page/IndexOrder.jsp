@@ -1,5 +1,6 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>		
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>	
 
 <!-- Start body-->
 	<div class="content">
@@ -10,7 +11,7 @@
 
     <ul class="breadcrumb">
         <li>
-			<a href="user/all">Trang chủ</a>
+			<a href="<c:url value="/admin/user/list.do?page=1&numPerPage=10"/> ">Trang chủ</a>
 			<span class="divider">/</span>
 		</li>
         <li class="active">Danh sách đơn hàng</li>
@@ -21,15 +22,30 @@
 
             <div class="btn-toolbar">              
                 <div class="btn-group">
-                    <form action="order" method = "get">
+                    <form action="list.do" method = "get">
                         <label class="menuControl">Số đơn đặt hàng/trang</label>
                         <select class="dropdown" name='numPerPage' onchange='submit()' data-settings='{"wrapperClass":"metro1"}'>
-                            <option @(10 == numPerPage ? "selected = 'selected' " : string.Empty) value="10">10</option>
-                            <option @(15 == numPerPage ? "selected = 'selected' " : string.Empty) value="15">15</option>
-                            <option @(20 == numPerPage ? "selected = 'selected' " : string.Empty) value="20" >20</option>
+                            <option value="10" 
+	                            <c:if test="${numPerPage == 10 }">
+	                             	selected = 'selected' 
+	                            </c:if> >
+	                              10 
+                            </option>
+                            <option value="15" 
+	                            <c:if test="${numPerPage == 15 }">
+	                             	selected = 'selected' 
+	                            </c:if> >
+	                              15 
+                            </option>
+                            <option value="20" 
+	                            <c:if test="${numPerPage == 20 }">
+	                             	selected = 'selected' 
+	                            </c:if> >
+	                              20 
+                            </option>
                         </select>
-                        <input type='hidden' name='page' value='1' />
-        
+                        <input type='hidden' name='page' value='${page }'/>
+        				<input type='hidden' name='id' value='${orderStatusId }' />
                     </form>
                 </div>
             </div>
@@ -41,33 +57,44 @@
                                 <th>#</th>
                                 <th>Mã đơn hàng</th>
                                 <th>Ngày đặt</th>
-                                <th>Khách hàng</th>
-                                <th>Tổng tiền</th>
+                                <th>Thành tiền (VNĐ)</th>
+                                <th>Phí vận chuyển (VNĐ)</th>
+                                <th>Tổng tiền (VNĐ)</th>
                                 <th>Tình trạng</th>
                             </tr>
                         </thead>
 
                         <tbody>
 							
-								<c:forEach var="orderItem" items="${listOrder}" varStatus="status">
+								<c:forEach var="orderItem" items="${listAdOrder}" varStatus="status">
 								<tr>
 								<td>${status.index}</td>
-								<td><a href="detailOrder.do?id=${orderItem.orderId }">${orderItem.orderCode }</a></td>
-								<td>${orderItem.orderDate }</td>
-								<td></td> 
-								<td>${orderItem.orderTotal }</td>	
+								<td><a href="detail.do?id=${orderItem.order.orderId }">${orderItem.order.orderCode }</a></td>
+								<td><fmt:formatDate value="${orderItem.order.orderDate }"  pattern="dd/MM/yyyy  hh:MM:ss"/></td>
+								<c:set var="n" value="${orderItem.order.orderTotal }"/>
+								<c:set var="m" value="${orderItem.order.orderTransferCost }"/>
+								<td><fmt:formatNumber type="number" value="${orderItem.order.orderTotal}" groupingUsed="true"/>
+								</td>	
+								<td><fmt:formatNumber type="number" value="${orderItem.order.orderTransferCost }" groupingUsed="true"/></td>
+								
+								<td><fmt:formatNumber type="number" value="${n + m}" groupingUsed="true"/> </td>
 								<td>
-									<form action="order" method="get">
+									<form action="update.do" method="get">
 										<select class="dropdown" name='status' onchange='submit()' data-settings='{"wrapperClass":"metro1"}'>
-											<option @(p.IDOrderStatus == 1 ? "selected = 'selected' " : string.Empty) value="1">Chưa xác nhận</option>
-											<option @(p.IDOrderStatus == 2 ? "selected = 'selected' " : string.Empty) value="2">Đã xác nhận</option>
-											<option @(p.IDOrderStatus == 3 ? "selected = 'selected' " : string.Empty) value="3">Đang trên đường giao hàng</option>
-											<option @(p.IDOrderStatus == 4 ? "selected = 'selected' " : string.Empty) value="4">Đã giao hàng</option>
-											<option @(p.IDOrderStatus == 6 ? "selected = 'selected' " : string.Empty) value="6">Hủy bởi admin</option>
+											<c:forEach var="orderStatusItem" items="${listOrderStatus}" >
+												<option value="${orderStatusItem.orderStatusId }" 
+					                            <c:if test="${orderStatusItem.orderStatusId == orderItem.orderStatusId }">
+					                             	selected = 'selected' 
+					                            </c:if> >
+					                              ${orderStatusItem.orderStatusName }
+				                            	</option>
+				                            </c:forEach>  
+											
 										</select>
-										<input type='hidden' name='numPerPage' value='@numPerPage' />
-										<input type='hidden' name='page' value='@page' />										
-										<input type='hidden' name='idOrder' value='@p.ID' />
+										<input type='hidden' name='numPerPage' value='${numPerPage}' />
+										<input type='hidden' name='page' value='${page }' />																			
+										<input type='hidden' name='id' value='${orderStatusId }' />
+										<input type='hidden' name='orderId' value='${orderItem.order.orderId }' />
 									</form>
 								</td>
                             </tr> 
@@ -79,43 +106,37 @@
             </div>
             <div class="pagination">
                 <ul>
-                    @if (page > 1)
-                    {
-                        <li>
-                            <a title="Trang Trước" href="order/page/x-1/productPerPage/10">
+                    <c:if test="${page > 1}">
+					       <li>
+                            <a title="Trang Trước" href="list.do?id=${orderStatusId }&page=${page-1 }&numPerPage=${numPerPage }">
                                 <
                             </a>
-                        </li>
-                    }
-
-                    @for (int p = startPage; p <= endPage; p++)
-                    {
-                        if (p == page)
-                        {
-                            <li>
-                                <a class="active-page">p</a>
-                            </li>
-                        }
-                        else
-                        {
-                            <li>
-								<a title="Trang x" href="order/page/x/productPerPage/10">                               
-                                    p
+                        </li>                     
+					</c:if> 
+                   
+					<c:forEach var="p" begin="1" end="${numPage+1 }" >                
+                        <c:if test="${page == p}">
+                        	<li>
+                                <a class="active-page">${p }</a>
+                           </li>
+                        </c:if> 
+                     	<c:if test="${page != p}">
+                     		 <li>
+								<a title="Trang ${p }" href="list.do?id=${orderStatusId }&page=${p }&numPerPage=${numPerPage }">                               
+                                    ${p }
                                 </a>
                             </li>
-                        }
+                     	</c:if> 
+                    </c:forEach>  
 
-
-                    }
-
-                    @if (page <= (numPage - 1))
-                    {
-                        <li>
-                            <a title="Trang Trước" href="order/page/x+1/productPerPage/10">
+					 <c:if test="${(numPage -1) >= page}">
+					       <li>
+                            <a title="Trang sau" href="list.do?id=${orderStatusId }&page=${page + 1 }&numPerPage=${numPerPage }">
                                 >
                             </a>
-                        </li>
-                    }
+                        </li>                     
+					</c:if> 
+					
                 </ul>
             </div>
             

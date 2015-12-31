@@ -9,6 +9,8 @@ public interface OrderDao extends Dao<Order>{
 	public Order getOrderById(int orderId);
 	public List<Order> getListOrderOfUser(String userName);
 	public List<Order> getListOrder();
+	public List<Order> getListOrderByStatusId(int statusId);
+	public List<Order> getListOrderByStatusIdPaging(int statusId, int page, int numPerPage);
 	public Order updateStatusOfOrder(int orderId, int orderStatusId);
 	public float getTransferCost(int districtId);
 	public Order getOrderByDetailOrderId(int detailOrderId);
