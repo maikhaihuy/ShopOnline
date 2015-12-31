@@ -35,30 +35,41 @@
 				</tr>
 			  </thead>
 			  <tbody>
-				<form id="myform" action="add.do" method="get">
+				<form action="add.do" method = "get">
 					<tr>
 					  <td>1</td>
 					  <td>
 						<select class="dropdown" name='productId' >
-							<option value="1">Sản phẩm 1</option>
-							<option value="2">Sản phẩm 2</option>											
+							<c:forEach var="productItem" items="${listProduct}" >
+							<option value="${productItem.productId }">${productItem.productName }</option>							
+							</c:forEach>
+																	
 						</select>
 					  </td>
 					  <td>
+					  	<c:set var="n" value="5"/>
 						<select class="dropdown" name='productDiscountValue' >
-							<option value="1">10%</option>
-							<option value="2">20%</option>											
+							
+							<c:forEach var="i" begin="0" end="10" >
+								<c:set var="m" value="${n*i }"/>
+								<option value="${m }" >
+									<c:out value="${m }"/>%
+								</option>
+							</c:forEach>
+																									
 						</select>
 					  </td>	
 					  <td><select class="dropdown" name='productDiscountId' >
-							<option value="1">Sản phẩm 1</option>
-							<option value="2">Sản phẩm 2</option>											
+					  		<option value="0">--</option>
+							<c:forEach var="productItem" items="${listProduct}" >
+							<option value="${productItem.productId }">${productItem.productName }</option>							
+							</c:forEach>											
 						</select>
 					</td>	
 					  <td><input type="text" name = "startDate" id="datepickerStart"></td> 
 					  <td><input type="text" name = "endDate" id="datepickerEnd"></td>	
 					  <td>
-					  	<button type="submit" class="btn btn-primary" ><i class="icon-plus"></i>Thêm mới</button>
+					  	<button type="submit" class="btn btn-primary" id="submit" disabled="true"><i class="icon-plus"></i>Thêm mới</button>
 					  </td>				  
 					</tr>   
 				</form>
@@ -67,12 +78,39 @@
 		</div>
 		
 		<script>
-		  $(function() {
-			$( "#datepickerStart" ).datepicker();
-		  });
+		
 		   $(function() {
-			$( "#datepickerEnd" ).datepicker();
-		  });
-	  </script>
+		    $('#submit').prop('disabled',true);
+		  });	
+
+		   var startDate = "";
+           var endDate = "";
+           $("#datepickerStart").datepicker( {
+        	   dateFormat: 'dd/mm/yy ',
+               onSelect: function(dateText, inst) { 
+            	 
+                  startDate = dateText;
+                  if(endDate != "" && startDate != "" && endDate > startDate){               	
+              		  $('#submit').prop('disabled',false);
+	                } else{
+	                	$('#submit').prop('disabled',true);
+	                }
+                	 
+               }
+           });
+           $("#datepickerEnd").datepicker({
+        	   dateFormat: 'dd/mm/yy',
+               onSelect: function(dateText, inst) {            	  
+                  endDate = dateText;
+                  if(endDate != "" && startDate != "" && endDate > startDate){               	
+              		  $('#submit').prop('disabled',false);
+	                } else{
+	                	$('#submit').prop('disabled',true);
+	                }
+               }
+           });
+
+         
+		</script>
 		
 		<!-- End body-->

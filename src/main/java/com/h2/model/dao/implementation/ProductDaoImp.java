@@ -398,6 +398,8 @@ public class ProductDaoImp extends AbstractHbnDao<Product> implements ProductDao
             if (ds.size() == 1){
             	Object obj = ds.get(0);
             	product = (Product) obj;           	
+            }else{
+            	return null;
             }
         } catch (Exception e) {
             e.printStackTrace();

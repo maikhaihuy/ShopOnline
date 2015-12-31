@@ -1,5 +1,6 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>		
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>	
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>	
 
 <!-- Start body-->
 		<div class="content">
@@ -10,7 +11,7 @@
         </div>
         
                 <ul class="breadcrumb">
-            <a href="<c:url value="/admin/order/list.do?id=0&page=1&numPerPage=10"/> ">Trang chủ</a>
+            <a href="<c:url value='/admin/order/list.do?id=0&page=1&numPerPage=10'/> ">Trang chủ</a>
             <span class="divider">/</span>
 			<li  class="active">Danh sách khuyến mãi</li>
         </ul>
@@ -37,44 +38,53 @@
 				</tr>
 			  </thead>
 			  <tbody>
-				<form id="myform" action="update.do" method="get">
+				<c:forEach var="discountItem" items="${listAdDiscount}" varStatus="status">
+					<form action="update.do" method = "get">
 					<tr>
-					  <td>1</td>
+					  <td>${status.index}</td>
+					  <td>${discountItem.product.productName}</td>						
 					  <td>
-						<select class="dropdown" name='productId' >
-							<option value="1">Sản phẩm 1</option>
-							<option value="2">Sản phẩm 2</option>											
-						</select>
-					  </td>
-					  <td>
+					  <c:set var="n" value="5"/>
 						<select class="dropdown" name='productDiscountValue' >
-							<option value="1">10%</option>
-							<option value="2">20%</option>											
+							<c:forEach var="i" begin="0" end="10" >
+								<c:set var="m" value="${n*i }"/>
+								<option value="${m }" 
+									<c:if test="${discountItem.discountInfo.discountPercentValue == m}">
+			                             	selected = 'selected' 
+			                        </c:if> >
+									<c:out value="${m }"/>%
+								</option>
+							</c:forEach>
+													
 						</select>
 					  </td>	
-					  <td><select class="dropdown" name='productDiscountId' >
-							<option value="1">Sản phẩm 1</option>
-							<option value="2">Sản phẩm 2</option>											
-						</select>
-					</td>	
-					  <td><input type="text" name = "startDate" id="datepickerStart"></td> 
-					  <td><input type="text" name = "endDate" id="datepickerEnd"></td>
-					  <input type='hidden' name='discontId' value='1' />
-					  <input type='hidden' name='discontInfoId' value='1' />
+					  <td>${discountItem.discountProduct.productName}</td>	
+					  <td><input type="text" name = "startDate" id="datepickerStart" 
+					     value='<fmt:formatDate value="${discountItem.discount.discountStartDate }"  pattern="dd/MM/yyyy  hh:MM:ss"/>' />
+					  </td> 
+					  <td><input type="text" name = "endDate" id="datepickerEnd" 
+					   value='<fmt:formatDate value="${discountItem.discount.discountEndDate }"  pattern="dd/MM/yyyy  hh:MM:ss"/>' />
+					 </td>
+					  <input type='hidden' name='discountId' value='${discountItem.discount.discountId }' />
+					  <input type='hidden' name='discountInfoId' value='${discountItem.discountInfo.discountInfoId }' />
 					  <td><button type="submit"  >Cập nhật</button>	</td>					  
-					</tr>   
+					</tr> 
+					
+					<script>
+				  $(function() {
+					$( "#datepickerStart" ).datepicker();
+				  });
+				   $(function() {
+					$( "#datepickerEnd" ).datepicker();
+				  });
+			  </script>
+	    
 				</form>
+				</c:forEach>
 			  </tbody>
 			</table>
 		</div>
 		
-		<script>
-		  $(function() {
-			$( "#datepickerStart" ).datepicker();
-		  });
-		   $(function() {
-			$( "#datepickerEnd" ).datepicker();
-		  });
-	  </script>
+		
 		
 		<!-- End body-->

@@ -95,6 +95,8 @@ public class DiscountInfoDaoImp extends AbstractHbnDao<DiscountInfo> implements 
             if (ds.size() == 1){
             	Object obj = ds.get(0);
             	discountInfo = (DiscountInfo) obj;           	
+            }else{
+            	return null;
             }
         } catch (Exception e) {
             e.printStackTrace();
