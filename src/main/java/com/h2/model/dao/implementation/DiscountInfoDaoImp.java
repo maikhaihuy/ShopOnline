@@ -6,6 +6,7 @@ import org.hibernate.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+import java.util.Date;
 
 import com.h2.model.dao.interfaces.AbstractHbnDao;
 import com.h2.model.dao.interfaces.DiscountInfoDao;
@@ -80,4 +81,26 @@ public class DiscountInfoDaoImp extends AbstractHbnDao<DiscountInfo> implements 
 		return discountInfo;
 	}
 	
+	public DiscountInfo getDiscountInfoByProductId(int productId) {
+		DiscountInfo discountInfo = new DiscountInfo();
+		Product product = productDao.get(productId, Product.class);
+		String hql = "";
+		Query query = null; 
+		try{                	
+			hql = "SELECT DISTINCT p.discountInfo FROM Discount p WHERE p.discountEndDate > :date AND p.product = :product ";
+            query = getSession().createQuery(hql);
+            query.setParameter("product", product);
+            query.setParameter("date", new Date());
+            List<Object> ds = query.list();
+            if (ds.size() == 1){
+            	Object obj = ds.get(0);
+            	discountInfo = (DiscountInfo) obj;           	
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            //log.error(e);          
+        } 
+		
+		return discountInfo;
+	}
 }
