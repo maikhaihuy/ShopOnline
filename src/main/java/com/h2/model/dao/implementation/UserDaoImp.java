@@ -135,6 +135,7 @@ public class UserDaoImp extends AbstractHbnDao<User> implements UserDao {
         List<User> listUser = new ArrayList<User>();
         String hql = "";   
         String hashPassword = hashPassword(userPassword);
+        //String hashPassword = userPassword;
         try{                  	
             hql = "FROM User u WHERE u.userName = :userName AND u.userPassword = :hashPassword AND u.isVerified = :isVerified";
             query = getSession().createQuery(hql);

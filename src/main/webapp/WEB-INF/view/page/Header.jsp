@@ -56,7 +56,7 @@
             <ul class="nav pull-right">
 				<!-- Login/ log out-->
 				<c:if test="${sessionScope.userName != null }">
-					<li><a>Xin chào, ...!</a></li>
+					<li><a>Xin chào, ${sessionScope.userName }!</a></li>
 	                <li><a href="<c:url value="/admin/user/logout.do" /> ">Đăng xuất</a></li>
 	            </c:if> 
 				

@@ -15,17 +15,20 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "user", catalog="shoedb")
 public class User implements Serializable{
 	private int userId;
+	@NotNull( message="Tên đăng nhập khác rỗng")
 	private String userName;
 	private String userEmail;
 	private String userPhoneNumber;
 	private String userAddress;
+	@NotNull( message="Mật khẩu khác rỗng")	
 	private String userPassword;
 	private int isDeleted;
 	private int isVerified;

@@ -82,13 +82,14 @@
         <div class="block">
             <p class="block-heading">Đăng nhập</p>
             <div class="block-body">
-            	<form:form method="POST" action="/ShopOnline/admin/user/login.do" modelAttribute="user">	
-                
-                    <label>Tên đăng nhập</label>
-                    <form:input path="userName" />
+            	<form:form method="post" action="login.do" mmodelAttribute="command" >	
+                	<label>Tên đăng nhập</label>
+                    <form:input class="span12" path="userName"/>
+                    <form:errors cssStyle="color:red" path="userName"></form:errors>
                     <label>Mật khẩu</label>
-                    <div><form:password path="userPassword" /></div>
-                    <input type="submit" value="Đăng nhập">
+                    <form:password class="span12" path="userPassword"/>
+                    <form:errors cssStyle="color:red" path="userPassword"></form:errors>
+                    <input type="submit" class="btn btn-primary pull-right" value="Đăng nhập">
                     <label class="remember-me"><input type="checkbox"> Ghi nhớ</label>
                     <div class="clearfix"></div>
                 </form:form>
