@@ -136,8 +136,12 @@ public class AdminOrderController {
 		product = productDao.getProductByDetailProductId(dp.getDetailProductId());
 		adDetailOrder.setProductName(product.getProductName());
 		// Get tax of product
-		float lastPrice = productDao.countPriceOfProductByProductId(product.getProductId());
-		float tax = (lastPrice - product.getProductPrice()) *detailOrder.getDetailOrderQuantity();
+		float tax = 0;
+		if (detailOrder.getDetailOrderPrice() != 0){
+			float lastPrice = productDao.countPriceOfProductByProductId(product.getProductId());
+			tax = (lastPrice - product.getProductPrice()) *detailOrder.getDetailOrderQuantity();
+		}
+		
 		adDetailOrder.setTax(tax);
 		// Counting sum
 		float sum = 0;

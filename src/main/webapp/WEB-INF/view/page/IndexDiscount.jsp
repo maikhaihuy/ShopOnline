@@ -10,7 +10,8 @@
         </div>
         
                 <ul class="breadcrumb">
-            <li><a href="user/all">Trang chủ</a> <span class="divider">/</span></li>
+            <a href="<c:url value="/admin/order/list.do?id=0&page=1&numPerPage=10"/> ">Trang chủ</a>
+            <span class="divider">/</span>
 			<li  class="active">Danh sách khuyến mãi</li>
         </ul>
 
@@ -18,9 +19,9 @@
             <div class="row-fluid">
                     
 		<div class="btn-toolbar">	
-			<button form="myform" type="submit" class="btn btn-primary" ><i class="icon-plus"></i> Thêm mới</button>
-			<div class="btn-group">
-			</div>
+			<form action="viewAdd.do">
+				<button type="submit" class="btn btn-primary" ><i class="icon-plus"></i> Thêm mới</button>			
+			</form>
 		</div>
 		<div class="well">
 			<table class="table" >
@@ -31,11 +32,12 @@
 				  <th>Khuyến mãi (%) </th> 
 				  <th>Sản phẩm khuyến mãi</th>	
 				  <th>Bắt đầu</th> 
-				  <th>Kết thúc</th>					 
+				  <th>Kết thúc</th>	
+				  <th></th>				 
 				</tr>
 			  </thead>
 			  <tbody>
-				<form id="myform" action="order" method="get">
+				<form id="myform" action="update.do" method="get">
 					<tr>
 					  <td>1</td>
 					  <td>
@@ -56,7 +58,10 @@
 						</select>
 					</td>	
 					  <td><input type="text" name = "startDate" id="datepickerStart"></td> 
-					  <td><input type="text" name = "endDate" id="datepickerEnd"></td>					  
+					  <td><input type="text" name = "endDate" id="datepickerEnd"></td>
+					  <input type='hidden' name='discontId' value='1' />
+					  <input type='hidden' name='discontInfoId' value='1' />
+					  <td><button type="submit"  >Cập nhật</button>	</td>					  
 					</tr>   
 				</form>
 			  </tbody>

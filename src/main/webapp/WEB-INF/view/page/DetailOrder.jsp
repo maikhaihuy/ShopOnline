@@ -35,6 +35,7 @@
 						<th class="text-center"><strong>Số Lượng</strong></th>
 						<th class="text-center"><strong>Đơn giá (VNĐ/1 sản phẩm)</strong></th>
 						<th class="text-center"><strong>Thuế (VNĐ)</strong></th>
+						<th class="text-center"><strong>Ghi chú</strong></th>
 						<th class="text-center"><strong>Thành tiền(VNĐ)</strong></th>
 					</tr>
 					<tbody>
@@ -47,12 +48,23 @@
 							<td class="text-center">${detailOrderItem.sizeName }</td>
 							<td class="text-center">${detailOrderItem.detailOrderQuantity }</td>
 							<td class="text-center"><fmt:formatNumber type="number" value="${detailOrderItem.detailOrderPrice }" groupingUsed="true"/></td>
-							<td class="text-center"><fmt:formatNumber type="number" value="${detailOrderItem.tax }" groupingUsed="true"/></td>
+
+							<c:if test="${detailOrderItem.detailOrderPrice == 0 }">
+								<td class="text-center">--</td>
+								<td class="text-center">Quà tặng</td>
+	                        </c:if> 
+	                        <c:if test="${detailOrderItem.detailOrderPrice != 0 }">
+								<td class="text-center"><fmt:formatNumber type="number" value="${detailOrderItem.tax }" groupingUsed="true"/></td>
+								<td class="text-center">--</td>
+	                        </c:if> 
+														
 							<td class="text-center"><fmt:formatNumber type="number" value="${detailOrderItem.sum }" groupingUsed="true"/></td>
+							
 							<c:set var="total" value="${total+detailOrderItem.sum }"/>
 						</tr>
 						</c:forEach>   
 						<tr>
+							<td></td>
 							<td></td>
 							<td></td>
 							<td></td>

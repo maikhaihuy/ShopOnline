@@ -27,4 +27,5 @@
 	<definition name="AddDiscount" extends="Page">
 		<put-attribute name="content" value="/WEB-INF/view/page/AddDiscount.jsp"/>
 	</definition>
+	<definition name="Index" template="/WEB-INF/view/index.jsp"/>
 </tiles-definitions>

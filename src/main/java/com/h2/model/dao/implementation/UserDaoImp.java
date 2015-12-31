@@ -269,4 +269,23 @@ public class UserDaoImp extends AbstractHbnDao<User> implements UserDao {
 	public String getForgotPasswordToken(String username) {
 		return tokenDao.getForgotTokenStringByUserName(username).getTokenString();
 	}
+
+	public List<User> getListSubAdmin() {
+		Query query = null;
+        List<User> listUser = new ArrayList<User>();
+        String hql = ""; 
+        Roles role = rolesDao.get(2, Roles.class);
+        try{                  	
+            hql = "FROM User u WHERE u.role = :role AND u.isVerified = :isVerified";
+            query = getSession().createQuery(hql);
+            query.setParameter("role", role);
+            query.setParameter("isVerified", 1);
+            listUser =  query.list();
+        } catch (Exception e) {
+            e.printStackTrace();
+            //log.error(e);          
+        } 
+        
+        return listUser;
+	}
 }

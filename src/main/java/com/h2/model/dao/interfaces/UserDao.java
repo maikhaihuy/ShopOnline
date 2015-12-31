@@ -1,6 +1,6 @@
 package com.h2.model.dao.interfaces;
 
-import java.security.NoSuchAlgorithmException;
+import java.util.List;
 
 import com.h2.model.pojo.User;
 
@@ -19,4 +19,5 @@ public interface UserDao extends Dao<User> {
 	public User getUserByTokenId(int tokenId);
 	public String getRegisterToken(String username);
 	public String getForgotPasswordToken(String username);
+	public List<User> getListSubAdmin();
 }

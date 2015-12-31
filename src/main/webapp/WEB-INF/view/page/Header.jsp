@@ -55,19 +55,12 @@
         <div class="navbar-inner">
             <ul class="nav pull-right">
 				<!-- Login/ log out-->
-                <li id="fat-menu" class="dropdown">
-                    <a href="account" role="button" onclick="ShowHideLogOut(this)">
-                        <i class="icon-user"></i> @User.Identity.GetUserName()
-                        <i class="icon-caret-down"></i>
-                    </a>
-                    <ul id="account" class="dropdown-menu">
-                        <li><a tabindex="-1" href="#">My Account</a></li>
-                        <li class="divider"></li>
-                        <li><a tabindex="-1" class="visible-phone" href="#">Settings</a></li>
-                        <li class="divider visible-phone"></li>
-                        <li><a href="<c:url value="/admin/user/logout.do" /> ">Đăng xuất</a></li>
-                    </ul>
-                </li>
+				<c:if test="${sessionScope.userName != null }">
+					<li><a>Xin chào, ...!</a></li>
+	                <li><a href="<c:url value="/admin/user/logout.do" /> ">Đăng xuất</a></li>
+	            </c:if> 
+				
+                
 				<!-- End Login/ log out-->
             </ul>
             <a class="brand"><span class="first">Just Do It</span> <span class="second">Shoe Store</span></a>
@@ -80,14 +73,14 @@
         <a link="account-menu" class="nav-header " onclick="ShowHide(this)"><i class="icon-user"></i>Thành Viên<span class="label label-info"></span></a>
 		<!-- User -->
         <ul id="account-menu" class="nav nav-list collapse">            
-            <li><a href="<c:url value="/admin/user/list.do?page=1&numPerPage=10" />"> Danh sách admin</a></li>
+            <li><a href="<c:url value="/admin/user/list.do" />"> Danh sách admin</a></li>
             <li><a href="<c:url value="/admin/user/add.do" />"> Thêm admin</a></li>
         </ul>
 		
 		<!-- Discount -->
         <a link="category-menu" class="nav-header " onclick="ShowHide(this)"><i class="icon-gift"></i>Khuyến mãi<i class="icon-chevron-up"></i></a>
         <ul id="category-menu" class="nav nav-list collapse">
-            <li><a href="<c:url value="/admin/discount/list.do?page=1&numPerPage=10" />"> Danh sách khuyến mãi</a></li>
+            <li><a href="<c:url value="/admin/discount/list.do" />"> Danh sách khuyến mãi</a></li>
             <li><a href="<c:url value="/admin/discount/add.do" />"> Thêm khuyến mãi</a></li>
         </ul>
 		<!--
