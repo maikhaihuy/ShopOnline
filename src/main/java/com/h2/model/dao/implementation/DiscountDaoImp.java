@@ -82,4 +82,24 @@ public class DiscountDaoImp extends AbstractHbnDao<Discount> implements Discount
 	    } 
 	}
 	
+/*	// Get list of discounts which are valid 
+	public DiscountInfo getDiscount(int productId) {
+		DiscountInfo inforDiscount = new DiscountInfo();
+		String hql = "";
+		Query query = null; 
+	
+		try{ 
+			hql =  "from Discount d WHERE d.discountEndDate > :date ORDER BY d.discountEndDate DESC" ;  
+			query = getSession().createQuery(hql); 
+			query.setParameter("date", new Date());
+			listDiscount = query.list();
+		} catch (Exception e) {
+			e.printStackTrace();          
+			//log.error(e);            
+		} 
+		if (listDiscount.size() == 0){
+			return null;
+		}
+		return inforDiscount;
+	}*/
 }

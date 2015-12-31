@@ -9,6 +9,7 @@ public class SubProduct {
 	private Brand brand;
 	private Product product;
 	private List<String> listImages;
+	private DiscountInfo discountInfo;
 	
 	public SubProduct(){}
 
@@ -67,6 +68,14 @@ public class SubProduct {
 
 	public void setListImages(List<String> listImages) {
 		this.listImages = listImages;
+	}
+
+	public DiscountInfo getDiscountInfo() {
+		return discountInfo;
+	}
+
+	public void setDiscountInfo(DiscountInfo discountInfo) {
+		this.discountInfo = discountInfo;
 	}
 	
 	

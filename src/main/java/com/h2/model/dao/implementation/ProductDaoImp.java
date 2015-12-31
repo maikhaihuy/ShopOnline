@@ -14,11 +14,13 @@ import com.h2.model.dao.interfaces.BrandDao;
 import com.h2.model.dao.interfaces.CategoryDao;
 import com.h2.model.dao.interfaces.ColorDao;
 import com.h2.model.dao.interfaces.DetailProductDao;
+import com.h2.model.dao.interfaces.DiscountInfoDao;
 import com.h2.model.dao.interfaces.ProductDao;
 import com.h2.model.dao.interfaces.SizeDao;
 import com.h2.model.pojo.Brand;
 import com.h2.model.pojo.Category;
 import com.h2.model.pojo.Color;
+import com.h2.model.pojo.DiscountInfo;
 import com.h2.model.pojo.Product;
 import com.h2.model.pojo.Size;
 import com.h2.model.pojo.SubProduct;
@@ -36,6 +38,8 @@ public class ProductDaoImp extends AbstractHbnDao<Product> implements ProductDao
 	private SizeDao sizeDao;
 	@Autowired
 	private DetailProductDao detailProductDao;
+	@Autowired
+	private DiscountInfoDao discountDao;
 	
 	// Get list of product with times, every time 50 products
 	public List<Product> getListProduct(int times) {
@@ -329,10 +333,12 @@ public class ProductDaoImp extends AbstractHbnDao<Product> implements ProductDao
 		
 		List<Color> listColorOfProduct = colorDao.getListColorOfProduct(productId);
 		List<Size> listSizeOfProduct = sizeDao.getListSizeOfProduct(productId);
+		DiscountInfo discountInfo = discountDao.getDiscountInfoByProductId(productId);
 		subProduct.setListColor(listColorOfProduct);
 		subProduct.setListSize(listSizeOfProduct);
 		subProduct.setCategory(category);
 		subProduct.setBrand(brand);
+		subProduct.setDiscountInfo(discountInfo);
 		return subProduct;
 	}
 

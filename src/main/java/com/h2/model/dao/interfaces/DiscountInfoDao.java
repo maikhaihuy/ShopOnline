@@ -6,4 +6,5 @@ public interface DiscountInfoDao extends Dao<DiscountInfo>{
 	public DiscountInfo createDiscountInfo(int discountPercentValue, int discountProductId);
 	public void updateDiscountInfo(int discountPercentValue, int discountProductId, int discountInfoId);
 	public DiscountInfo getDiscountInfoByDiscountId(int discountId);
+	public DiscountInfo getDiscountInfoByProductId(int productId);
 }
