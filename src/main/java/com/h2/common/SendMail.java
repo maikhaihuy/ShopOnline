@@ -13,9 +13,12 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
+
 public class SendMail {
 	private static Session session;
-	final String pathFile = "/WEB-INF/content/";
+	final String pathFile = "/content/";
 	public SendMail() {
 		Properties props = new Properties();
 		props.put("mail.smtp.auth", "true");
@@ -44,9 +47,9 @@ public class SendMail {
 			
 			String content = readContentFromFile(typeEmail);
 			
-			content.replace("[NAME]", user);
-			content.replace("[SHOPNAME]", "ShopOnline");
-			content.replace("[REGISTERLINK]", link);
+			content = content.replace("[NAME]", user);
+			content = content.replace("[SHOPNAME]", "ShopOnline");
+			content = content.replace("[REGISTERLINK]", link);
 			
 			message.setText(content);
 			
@@ -63,8 +66,9 @@ public class SendMail {
 
         try {
             //use buffering, reading one line at a time
-            InputStream ip = getClass().getClassLoader().getResourceAsStream(pathFile + typeEmail);
-
+        	Resource resource = new ClassPathResource(pathFile + typeEmail);
+            InputStream ip = resource.getInputStream();
+            		
             BufferedReader reader = new BufferedReader(new InputStreamReader(ip, "UTF-8"));
             try {
                 String line = null;

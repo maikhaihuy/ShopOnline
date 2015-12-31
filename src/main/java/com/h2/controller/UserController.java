@@ -43,25 +43,26 @@ public class UserController {
 	public ResponseEntity<User> LoginUser(@RequestBody User user) {
 		User newUser = userDao.login(user.getUserName(), user.getUserPassword());
 		if (newUser == null)
-			return new ResponseEntity<User>(newUser, HttpStatus.GONE);
+			return new ResponseEntity<User>(newUser, HttpStatus.BAD_REQUEST);
 		return new ResponseEntity<User>(newUser, HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/update/token/{token}", method = RequestMethod.PUT)
 	@ResponseBody
-	public ResponseEntity<User> UpdateUserPassword(@PathVariable("username") String username,
-			@PathVariable("userpassword") String userpassword, @PathVariable("token") String token) {
-		User user = userDao.updateUserPassword(username, userpassword, token);
-		return new ResponseEntity<User>(user, HttpStatus.OK);
+	public ResponseEntity<User> UpdateUserPassword(@RequestBody User user, @PathVariable("token") String token) {
+		User reUser = userDao.updateUserPassword(user.getUserName(), user.getUserPassword(), token);
+		if (reUser == null)
+			return new ResponseEntity<User>(reUser, HttpStatus.NOT_FOUND);
+		return new ResponseEntity<User>(reUser, HttpStatus.OK);
 	}
 
-	@RequestMapping(value = "/forgotpassword/{username}", method = RequestMethod.GET)
+	@RequestMapping(value = "/forgotpassword", method = RequestMethod.POST, consumes = { "application/json" })
 	@ResponseBody
-	public ResponseEntity<User> ForgotPassword(@PathVariable("username") String username) {
-		User user = userDao.createToken(username);
+	public ResponseEntity<User> ForgotPassword(@RequestBody User userEmail) {
+		User user = userDao.createToken(userEmail.getUserEmail());
 		if (user == null)
 			return new ResponseEntity<User>(HttpStatus.NOT_FOUND);
-		sendGetPasswordMail(username, user.getUserEmail());
+		sendGetPasswordMail(user.getUserName(), user.getUserEmail());
 		return new ResponseEntity<User>(user,HttpStatus.OK);
 	}
 
