@@ -10,7 +10,8 @@
         </div>
         
                 <ul class="breadcrumb">
-            <li><a href="user/all">Trang chủ</a> <span class="divider">/</span></li>
+            <li><a href="<c:url value="/admin/order/list.do?id=0&page=1&numPerPage=10"/> ">Trang chủ</a>
+            <span class="divider">/</span></li>
             <li class="active">Danh sách admin </li>
         </ul>
 
@@ -18,9 +19,10 @@
             <div class="row-fluid">
                     
 		<div class="btn-toolbar">	
-			<button form="myform" type="submit" class="btn btn-primary" ><i class="icon-plus"></i> Thêm mới</button>
-			<div class="btn-group">
-			</div>
+			
+			<form action="add.do">
+				<button type="submit" class="btn btn-primary" ><i class="icon-plus"></i> Thêm mới</button>			
+			</form>
 		</div>
 		<div class="well">
 			<table class="table" >
@@ -31,10 +33,12 @@
 				</tr>
 			  </thead>
 			  <tbody>
+			  	<c:forEach var="userItem" items="${listSubAdmin}" varStatus="status">
 					<tr>
 					  <td>1</td>
-					  <td>Admin 1</td>
+					  <td>${listSubAdmin.userName }</td>
 					</tr>
+				</c:forEach>
 			  </tbody>
 			</table>
 		</div>
