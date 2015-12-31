@@ -11,7 +11,7 @@
 
     <ul class="breadcrumb">
         <li>
-			<a href="<c:url value="/admin/user/list.do?page=1&numPerPage=10"/> ">Trang chủ</a>
+			<a href="<c:url value="/admin/order/list.do?id=0&page=1&numPerPage=10"/> ">Trang chủ</a>
 			<span class="divider">/</span>
 		</li>
         <li class="active">Danh sách đơn hàng</li>
