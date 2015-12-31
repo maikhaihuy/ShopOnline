@@ -1,5 +1,9 @@
 package com.h2.common;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.Properties;
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -11,7 +15,7 @@ import javax.mail.internet.MimeMessage;
 
 public class SendMail {
 	private static Session session;
-	
+	final String pathFile = "/WEB-INF/content/";
 	public SendMail() {
 		Properties props = new Properties();
 		props.put("mail.smtp.auth", "true");
@@ -28,7 +32,7 @@ public class SendMail {
 			});
 	}
 	
-	public void SendTo(String user, String email, String subject, String content){
+	public void SendTo(String user, String email, String typeEmail, String subject, String link){
 		try {
 			Message message = new MimeMessage(session);
 			message.setFrom(new InternetAddress(email));
@@ -37,6 +41,13 @@ public class SendMail {
 			
 			
 			message.setSubject(subject);
+			
+			String content = readContentFromFile(typeEmail);
+			
+			content.replace("[NAME]", user);
+			content.replace("[SHOPNAME]", "ShopOnline");
+			content.replace("[REGISTERLINK]", link);
+			
 			message.setText(content);
 			
 			Transport.send(message);
@@ -45,5 +56,28 @@ public class SendMail {
 			throw new RuntimeException(e);
 		}
 	}
+	
+	//Method to read HTML file as a String 
+    public String readContentFromFile(String typeEmail) {
+        StringBuffer contents = new StringBuffer();
 
+        try {
+            //use buffering, reading one line at a time
+            InputStream ip = getClass().getClassLoader().getResourceAsStream(pathFile + typeEmail);
+
+            BufferedReader reader = new BufferedReader(new InputStreamReader(ip, "UTF-8"));
+            try {
+                String line = null;
+                while ((line = reader.readLine()) != null) {
+                    contents.append(line);
+                    contents.append(System.getProperty("line.separator"));
+                }
+            } finally {
+                reader.close();
+            }
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        return contents.toString();
+    }
 }
