@@ -47,7 +47,7 @@ public class UserController {
 		return new ResponseEntity<User>(newUser, HttpStatus.OK);
 	}
 
-	@RequestMapping(value = "/update/token/{token}", method = RequestMethod.PUT)
+	@RequestMapping(value = "/update/token/{token}", method = RequestMethod.POST, consumes = { "application/json" })
 	@ResponseBody
 	public ResponseEntity<User> UpdateUserPassword(@RequestBody User user, @PathVariable("token") String token) {
 		User reUser = userDao.updateUserPassword(user.getUserName(), user.getUserPassword(), token);

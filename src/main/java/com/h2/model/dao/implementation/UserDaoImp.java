@@ -18,6 +18,7 @@ import com.h2.model.dao.interfaces.TokenDao;
 import com.h2.model.dao.interfaces.UserDao;
 import com.h2.model.pojo.District;
 import com.h2.model.pojo.Roles;
+import com.h2.model.pojo.Token;
 import com.h2.model.pojo.User;
 
 @Repository ("userDao")
@@ -79,8 +80,9 @@ public class UserDaoImp extends AbstractHbnDao<User> implements UserDao {
 		Query query= null;
         String hql = "";
         String hashPassword = hashPassword(userPassword);
+        Token tokeCmp = tokenDao.getForgotTokenStringByUserName(userName);
         // Check userName existst
-        if(tokenDao.getForgotTokenStringByUserName(userName).equals(tokenStr)) {
+        if(tokeCmp.getTokenString().equals(tokenStr)) {
 	        if (getUserByUserName(userName) != null){
 		        try{                  	
 		            hql = "UPDATE User set userPassword = :userPassword  WHERE userName = :userName";
@@ -88,7 +90,6 @@ public class UserDaoImp extends AbstractHbnDao<User> implements UserDao {
 		            query.setParameter("userPassword", hashPassword);
 		            query.setParameter("userName", userName);
 		            query.executeUpdate();
-		      
 		        } catch (Exception e) {
 		            e.printStackTrace();
 		            //log.error(e);
@@ -96,7 +97,9 @@ public class UserDaoImp extends AbstractHbnDao<User> implements UserDao {
 		        } 
 	        }
 	        user = getUserByUserName(userName);
-	        user.setUserPassword("");
+	        //user.setUserPassword("");
+	        tokenDao.updateVerifiedUser(userName);
+	        tokenDao.updateVerifiedToken(tokeCmp.getTokenId());
         }
         return user;
 	}
@@ -104,38 +107,43 @@ public class UserDaoImp extends AbstractHbnDao<User> implements UserDao {
 	// Create new user
 	public User createNewUser(String userName, String userEmail,
 			String userPassword, int roleId) {
-		User user = new User();
-        user.setUserName(userName);
-        user.setUserEmail(userEmail);
-        user.setUserPhoneNumber("");
-        user.setUserAddress("");
-        user.setUserPassword(hashPassword(userPassword));
-        user.setIsDeleted(0);
-        user.setDistrict(districtDao.get(1, District.class));
-        user.setIsVerified(0);
-        user.setRole(rolesDao.get(roleId, Roles.class));
-        save(user);
-        
-        // Create token
-        // Can kiem tra add thanh cong
-        tokenDao.createRegisterTokenByUserName(userName);
-        
+		User user = null;
+		// Check conflict
+		if(!checkUserEmailExist(userEmail) && !checkUserNameExist(userName) ){
+			user = new User();
+	        user.setUserName(userName);
+	        user.setUserEmail(userEmail);
+	        user.setUserPhoneNumber("");
+	        user.setUserAddress("");
+	        user.setUserPassword(hashPassword(userPassword));
+	        user.setIsDeleted(0);
+	        user.setDistrict(districtDao.get(1, District.class));
+	        user.setIsVerified(0);
+	        user.setRole(rolesDao.get(roleId, Roles.class));
+	        save(user);
+	        
+	        // Create token
+	        // Can kiem tra add thanh cong
+	        tokenDao.createRegisterTokenByUserName(userName);
+		}
+		
 		return user;
 	}
 
 	// Forgot password: call create token
-	public User createToken(String userName) {
-		tokenDao.createForgotPasswordTokenByUserName(userName);
-		return getUserByUserName(userName);
+	public User createToken(String userEmail) {
+		User user = getUserByUserEmail(userEmail);
+		
+		tokenDao.createForgotPasswordTokenByUserName(user.getUserName());
+		return user;
 	}
-
+	
 	// Return user, set password = ""
 	public User login(String userName, String userPassword) {
 		Query query = null;
         List<User> listUser = new ArrayList<User>();
         String hql = "";   
         String hashPassword = hashPassword(userPassword);
-        //String hashPassword = userPassword;
         try{                  	
             hql = "FROM User u WHERE u.userName = :userName AND u.userPassword = :hashPassword AND u.isVerified = :isVerified";
             query = getSession().createQuery(hql);
@@ -161,7 +169,7 @@ public class UserDaoImp extends AbstractHbnDao<User> implements UserDao {
 		String hashpassword = password;
 
 		try {
-			byte[] salt = password.getBytes(Charset.forName("UTF-8"));
+			byte[] salt = password.getBytes();
 			
 	        // Hash by SHA-1
 			MessageDigest md = MessageDigest.getInstance("SHA-1");

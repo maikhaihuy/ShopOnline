@@ -42,7 +42,7 @@ public class TokenController {
 		Token token = tokenDao.getForgotTokenStringByUserName(username);
 		Token confirmToken = tokenDao.verifyToken(strtoken);
 		if (token != null && confirmToken != null && token.getTokenString().equals(strtoken)){
-			tokenDao.updateVerifiedToken(token.getTokenId());
+			//tokenDao.updateVerifiedToken(token.getTokenId());
 			return new ResponseEntity<Token>(token, HttpStatus.OK);
 		}
 		else

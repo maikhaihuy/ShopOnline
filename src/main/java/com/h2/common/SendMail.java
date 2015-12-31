@@ -51,7 +51,7 @@ public class SendMail {
 			content = content.replace("[SHOPNAME]", "ShopOnline");
 			content = content.replace("[REGISTERLINK]", link);
 			
-			message.setText(content);
+			message.setContent(content, "text/html; charset=utf-8");
 			
 			Transport.send(message);
 		}
