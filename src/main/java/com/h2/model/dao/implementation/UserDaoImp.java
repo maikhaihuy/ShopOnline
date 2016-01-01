@@ -1,9 +1,7 @@
 package com.h2.model.dao.implementation;
 
-import java.nio.charset.Charset;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
 import org.hibernate.Query;
