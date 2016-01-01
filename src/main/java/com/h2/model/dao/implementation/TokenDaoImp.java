@@ -118,11 +118,7 @@ public class TokenDaoImp extends AbstractHbnDao<Token> implements TokenDao {
 		Token token = new Token();
 	
 		try{   
-			// Get all of old forgot token  of user
-			Token registerToken = new Token();
-			registerToken = getRegisterTokenStringByUserName(userName);
-			// Update it to verified
-			updateVerifiedToken(registerToken.getTokenId());
+			
 			// Create token string
 	        UUID tokenString = UUID.randomUUID();
 	        token.setTokenString(tokenString.toString());
