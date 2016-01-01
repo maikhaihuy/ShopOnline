@@ -117,7 +117,12 @@ public class TokenDaoImp extends AbstractHbnDao<Token> implements TokenDao {
 	public Token createRegisterTokenByUserName(String userName) {
 		Token token = new Token();
 	
-		try{     
+		try{   
+			// Get all of old forgot token  of user
+			Token registerToken = new Token();
+			registerToken = getRegisterTokenStringByUserName(userName);
+			// Update it to verified
+			updateVerifiedToken(registerToken.getTokenId());
 			// Create token string
 	        UUID tokenString = UUID.randomUUID();
 	        token.setTokenString(tokenString.toString());
@@ -149,6 +154,11 @@ public class TokenDaoImp extends AbstractHbnDao<Token> implements TokenDao {
 		Token token = new Token();
 		
 		try{     
+			// Get all of old forgot token  of user
+			Token forgetToken = new Token();
+			forgetToken = getForgotTokenStringByUserName(userName);
+			// Update it to verified
+			updateVerifiedToken(forgetToken.getTokenId());
 			// Create token string
 	        UUID tokenString = UUID.randomUUID();
 	        token.setTokenString(tokenString.toString());
@@ -162,7 +172,7 @@ public class TokenDaoImp extends AbstractHbnDao<Token> implements TokenDao {
 	        loadProperties();
 	        Calendar c = Calendar.getInstance();
 	        c.setTime(new Date()); // Now use today date.
-	        c.add(Calendar.DATE, EXPIRY_AUTHENTIC_EMAIL); // Adding  days
+	        c.add(Calendar.DATE, EXPIRY_AUTHENTIC_EMAIL); 
 	        Date exprityDate = c.getTime();
 	        token.setExpiryDate(exprityDate);
 	        
