@@ -77,6 +77,12 @@ public class ProductController {
 		subProduct.setProduct(product);
 		subProduct.setListImages(listImages);
 		
+		// FIx bug: Discount
+		if (subProduct.getDiscountInfo() != null && subProduct.getDiscountInfo().getDiscountPercentValue() != 0) {
+			float p = subProduct.getProduct().getProductPrice();
+			subProduct.getProduct().setProductPrice(p * subProduct.getDiscountInfo().getDiscountPercentValue() / 100);
+		}
+		
 		return new ResponseEntity<SubProduct>(subProduct, HttpStatus.OK);
 	}
 	
@@ -123,6 +129,13 @@ public class ProductController {
 		for (Product product : listProduct) {
 			SubProduct subProduct = productDao.getInfoOfProductByProductId(product.getProductId());
 			subProduct.setProduct(product);
+			
+			// FIx bug: Discount
+			if (subProduct.getDiscountInfo() != null && subProduct.getDiscountInfo().getDiscountPercentValue() != 0) {
+				float p = subProduct.getProduct().getProductPrice();
+				subProduct.getProduct().setProductPrice((1 - p/100) * subProduct.getDiscountInfo().getDiscountPercentValue());
+			}
+			
 			listSubProduct.add(subProduct);
 		}
 		return listSubProduct;
