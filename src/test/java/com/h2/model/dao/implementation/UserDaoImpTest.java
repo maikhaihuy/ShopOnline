@@ -14,7 +14,7 @@ import com.h2.model.pojo.Roles;
 import com.h2.model.pojo.User;
 
 public class UserDaoImpTest extends TestCase{
-	@Test
+	/*@Test
     public void testGetUserByUserName() {
         System.out.println("getUserByUserName");
         ApplicationContext appCtx = new ClassPathXmlApplicationContext("beans-service.xml");
@@ -113,7 +113,7 @@ public class UserDaoImpTest extends TestCase{
         	System.out.println("User email exists");
         }else
         System.out.println("User email doesn't exist");
-    }
+    }*/
 	
 	@Test
     public void testTokenForgetPassword() {
