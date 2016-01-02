@@ -19,12 +19,16 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.h2.model.dao.interfaces.AbstractHbnDao;
 import com.h2.model.dao.interfaces.CityDao;
+import com.h2.model.dao.interfaces.DetailOrderDao;
+import com.h2.model.dao.interfaces.DetailProductDao;
 import com.h2.model.dao.interfaces.DistrictDao;
 import com.h2.model.dao.interfaces.OrderDao;
 import com.h2.model.dao.interfaces.OrderStatusDao;
 import com.h2.model.dao.interfaces.RecipientDao;
 import com.h2.model.dao.interfaces.UserDao;
 import com.h2.model.pojo.City;
+import com.h2.model.pojo.DetailOrder;
+import com.h2.model.pojo.DetailProduct;
 import com.h2.model.pojo.District;
 import com.h2.model.pojo.Order;
 import com.h2.model.pojo.OrderStatus;
@@ -44,6 +48,10 @@ public class OrderDaoImp extends AbstractHbnDao<Order> implements OrderDao{
 	private OrderStatusDao orderStatusDao;
 	@Autowired
 	private RecipientDao recipientDao;
+	@Autowired
+	private DetailOrderDao detailOrderDao;
+	@Autowired
+	private DetailProductDao detailProductDao;
 	
 	private static int TIME_CANCEL_ORDER;
 	
@@ -97,6 +105,19 @@ public class OrderDaoImp extends AbstractHbnDao<Order> implements OrderDao{
 		return order;
 	}
 	
+	public Recipient createRecipient(String recipientName,
+			String recipientEmail, String recipientPhoneNumber,
+			String recipientAddress, int districtId){
+		return recipientDao.createNewRecipient(recipientName, recipientEmail, recipientPhoneNumber, recipientAddress, districtId);
+	}
+	public DetailOrder createDetailOrder(float productPrice, int quantity, int orderId, int productId, int colorId, int sizeId){
+		DetailProduct dpTemp = getDetailProduct(productId, colorId, sizeId);
+		return detailOrderDao.createNewDetailOder(productPrice, quantity, orderId, dpTemp.getDetailProductId());
+	}
+	
+	public DetailProduct getDetailProduct(int productId, int colorId, int sizeId){
+		return detailProductDao.getDetailProductByProductColorSizeId(productId, colorId, sizeId);
+	}
 	// Get order by order Id
 	public Order getOrderById(int orderId) {	
 		Order order = null;

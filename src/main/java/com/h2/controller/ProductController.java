@@ -80,7 +80,7 @@ public class ProductController {
 		// FIx bug: Discount
 		if (subProduct.getDiscountInfo() != null && subProduct.getDiscountInfo().getDiscountPercentValue() != 0) {
 			float p = subProduct.getProduct().getProductPrice();
-			subProduct.getProduct().setProductPrice(p * subProduct.getDiscountInfo().getDiscountPercentValue() / 100);
+			subProduct.getProduct().setProductPrice( p * (100 - subProduct.getDiscountInfo().getDiscountPercentValue())/100);
 		}
 		
 		return new ResponseEntity<SubProduct>(subProduct, HttpStatus.OK);
@@ -133,7 +133,7 @@ public class ProductController {
 			// FIx bug: Discount
 			if (subProduct.getDiscountInfo() != null && subProduct.getDiscountInfo().getDiscountPercentValue() != 0) {
 				float p = subProduct.getProduct().getProductPrice();
-				subProduct.getProduct().setProductPrice((1 - p/100) * subProduct.getDiscountInfo().getDiscountPercentValue());
+				subProduct.getProduct().setProductPrice( p * (100 - subProduct.getDiscountInfo().getDiscountPercentValue())/100);
 			}
 			
 			listSubProduct.add(subProduct);

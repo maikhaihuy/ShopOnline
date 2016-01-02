@@ -161,6 +161,11 @@ public class UserDaoImp extends AbstractHbnDao<User> implements UserDao {
 		return null;
 	}
 
+	public User updateInfo(String userEmail, String userPhoneNumber){
+		User user = new User();
+		//hql:
+		return user;
+	}
 	
 	// Hash password
 	public String hashPassword(String password) {

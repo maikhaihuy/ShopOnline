@@ -1,18 +1,24 @@
 package com.h2.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.h2.model.dao.interfaces.OrderDao;
+import com.h2.model.pojo.DetailOrder;
 import com.h2.model.pojo.Order;
+import com.h2.model.pojo.Recipient;
+import com.h2.model.pojo.SubDetailProduct;
+import com.h2.model.pojo.DetailOrder;
 
 @RestController
 @RequestMapping("/order")
@@ -41,6 +47,14 @@ public class OrderController {
 		return new ResponseEntity<Order>(order, HttpStatus.OK);
 	}
 	
+	@RequestMapping(value="/cost/{district}",
+			method=RequestMethod.GET)
+	@ResponseBody
+	public ResponseEntity<Float> GetCost(@PathVariable("district") int district){
+		float cost = orderDao.getTransferCost(district);
+		return new ResponseEntity<Float>(cost, HttpStatus.OK);
+	}
+	
 	@RequestMapping(value="/new/{username}/{idrecipient}/{total}",
 			method=RequestMethod.GET)
 	@ResponseBody
@@ -56,6 +70,43 @@ public class OrderController {
 	public ResponseEntity<Order> UpdateOrder(@PathVariable("orderid") int orderid, @PathVariable("orderstatus") int orderstatus){
 		Order order = orderDao.updateStatusOfOrder(orderid, orderstatus);
 		return new ResponseEntity<Order>(order, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value="/new/username/{username}/district/{district}/total/{total}",
+			method=RequestMethod.POST)
+	@ResponseBody
+	public ResponseEntity<Order> NewOrder(@RequestBody Recipient recipient,
+											@PathVariable("username") String username,
+											@PathVariable("district") int district,
+											@PathVariable("total") float total){
+		Order order = null;
+		Recipient newRecipient = orderDao.createRecipient(recipient.getRecipientName(),
+															recipient.getRecipientEmail(),
+															recipient.getRecipientPhoneNumber(),
+															recipient.getRecipientAddress() ,
+															district);
+		if(newRecipient != null) {
+			order = orderDao.createNewOrder(username, newRecipient.getRecipientId(), total);
+			return new ResponseEntity<Order>(order, HttpStatus.OK);
+		}
+		return new ResponseEntity<Order>(order, HttpStatus.BAD_REQUEST);
+		
+	}
+	
+	@RequestMapping(value="/new/order/{order}/",
+			method=RequestMethod.POST)
+	@ResponseBody
+	public ResponseEntity<List<DetailOrder>> NewDetailOrder(@RequestBody List<SubDetailProduct> listSubDetailProduct,
+															@PathVariable("order") int order){
+		List<DetailOrder> listOrder = new ArrayList<DetailOrder>();
+		
+		for(SubDetailProduct sp : listSubDetailProduct){
+			DetailOrder dorder = orderDao.createDetailOrder(sp.getProductPrice(), sp.getQuantity(), order, sp.getProductId(), sp.getColorId(), sp.getSizeId());
+			if (dorder != null)
+				listOrder.add(dorder);
+		}
+		
+		return new ResponseEntity<List<DetailOrder>>(listOrder, HttpStatus.BAD_REQUEST);
 	}
 	
 	// Admin

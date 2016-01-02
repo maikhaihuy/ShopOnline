@@ -66,6 +66,15 @@ public class UserController {
 		return new ResponseEntity<User>(user,HttpStatus.OK);
 	}
 
+	@RequestMapping(value = "/update/info/{username}", method = RequestMethod.POST, consumes = { "application/json" })
+	@ResponseBody
+	public ResponseEntity<User> UpdateInfo(@RequestBody User user, @PathVariable ("username") String username) {
+		User newUser = userDao.updateInfo(user.getUserEmail(), user.getUserPhoneNumber());
+		if(newUser == null)
+			return new ResponseEntity<User>(newUser, HttpStatus.NOT_FOUND);
+		return new ResponseEntity<User>(newUser,HttpStatus.OK);
+	}
+	
 	// Support function
 
 	private void sendConfirmationMail(String username, String email) {

@@ -10,6 +10,7 @@ public class SubProduct {
 	private Product product;
 	private List<String> listImages;
 	private DiscountInfo discountInfo;
+	private Tax tax;
 	
 	public SubProduct(){}
 
@@ -76,6 +77,14 @@ public class SubProduct {
 
 	public void setDiscountInfo(DiscountInfo discountInfo) {
 		this.discountInfo = discountInfo;
+	}
+
+	public Tax getTax() {
+		return tax;
+	}
+
+	public void setTax(Tax tax) {
+		this.tax = tax;
 	}
 	
 	

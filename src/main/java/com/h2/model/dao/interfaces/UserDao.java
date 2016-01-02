@@ -12,6 +12,7 @@ public interface UserDao extends Dao<User> {
 	public User updateUserPassword(String userName, String userPassword, String tokenStr);
 	public void updateVerifiedUser(String userName);
 	public User login(String userName, String userPassword);
+	public User updateInfo(String userEmail, String userPhoneNumber);
 	public String hashPassword(String userPassword);
 	public boolean checkUserNameExist(String userName);
 	public boolean checkUserEmailExist(String userEmail);
