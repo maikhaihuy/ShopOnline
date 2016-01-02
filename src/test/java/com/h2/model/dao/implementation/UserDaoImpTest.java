@@ -113,7 +113,7 @@ public class UserDaoImpTest extends TestCase{
         	System.out.println("User email exists");
         }else
         System.out.println("User email doesn't exist");
-    }*/
+    }
 	
 	@Test
     public void testTokenForgetPassword() {
@@ -125,6 +125,16 @@ public class UserDaoImpTest extends TestCase{
 		String token = instance.getForgotPasswordToken(user.getUserName());
        
         System.out.println(token);
-    }
+    }*/
     
+	@Test
+    public void testHashPassword() {
+        System.out.println("testHashPassword");
+        ApplicationContext appCtx = new ClassPathXmlApplicationContext("beans-service.xml");
+		UserDao instance = (UserDao)appCtx.getBean("userDao");
+		// create forgot pass token 
+		String token = instance.hashPassword("12345");
+       
+        System.out.println(token);
+    }
 }
